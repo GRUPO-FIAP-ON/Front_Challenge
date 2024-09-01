@@ -5,24 +5,25 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LoginScreen from './app/screen/LoginScreen';
+import CadastroScreen from './app/screen/CadastroScreen';
 import InboxScreen from './app/screen/InboxScreen';
+import CalendarScreen from './app/screen/CalendarScreen';
 import EmailSentScreen from './app/screen/EmailSentScreen';
 import EmailDeletedScreen from './app/screen/EmailDeletedScreen';
 import DraftScreen from './app/screen/DraftScreen';
 import ArchiveScreen from './app/screen/ArchiveScreen';
 import SpamScreen from './app/screen/SpamScreen';
-import NewMessageScreen from './app/screen/NewMessageScreen';
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Dimensions, TextInput } from 'react-native';
-
-const { height } = Dimensions.get('window');
+import { Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
+import { useFonts } from 'expo-font';
+import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void, onOpenSearch: () => void }> = ({ onOpenFilterOptions, onOpenSearch }) => {
+const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpenFilterOptions }) => {
   return (
     <Drawer.Navigator
-      initialRouteName="Caixa de entrada"
+      initialRouteName="Inbox"
       screenOptions={({ navigation }) => ({
         headerLeft: () => (
           <Icon
@@ -34,39 +35,98 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void, onOpenSearch:
           />
         ),
         headerRight: () => (
-          <View style={{ flexDirection: 'row' }}>
-            <Icon
-              name="funnel-outline"
-              size={25}
-              color="#000"
-              style={{ marginRight: 15 }}
-              onPress={onOpenFilterOptions}
-            />
-            <Icon
-              name="search-outline"
-              size={25}
-              color="#000"
-              style={{ marginRight: 15 }}
-              onPress={onOpenSearch}
-            />
-          </View>
+          <Icon
+            name="funnel-outline"
+            size={25}
+            color="#383838"
+            style={{ marginRight: 15 }}
+            onPress={onOpenFilterOptions}
+          />
         ),
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'Ubuntu_700Bold',
+          fontSize: 18,
+        },
+        drawerLabelStyle: {
+          fontFamily: 'Ubuntu_700Bold', 
+          fontSize: 16,
+        },
+        drawerActiveTintColor: '#000',
+        drawerInactiveTintColor: '#383838', 
       })}
     >
-      <Drawer.Screen name="Caixa de entrada" component={InboxScreen} />
-      <Drawer.Screen name="Enviados" component={EmailSentScreen} />
-      <Drawer.Screen name="Excluídos" component={EmailDeletedScreen} />
-      <Drawer.Screen name="Rascunhos" component={DraftScreen} />
-      <Drawer.Screen name="Arquivo Morto" component={ArchiveScreen} />
-      <Drawer.Screen name="Lixo eletrônico" component={SpamScreen} />
+      <Drawer.Screen
+        name="Caixa de entrada"
+        component={InboxScreen}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Icon name="mail-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Enviados"
+        component={EmailSentScreen}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Icon name="paper-plane-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Excluídos"
+        component={EmailDeletedScreen}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Icon name="trash-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Rascunhos"
+        component={DraftScreen}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Icon name="document-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Arquivo Morto"
+        component={ArchiveScreen}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Icon name="archive-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Lixo eletrônico"
+        component={SpamScreen}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Icon name="alert-circle-outline" size={size} color={color} />
+          ),
+        }}
+      />
     </Drawer.Navigator>
   );
 };
 
+
 const App: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [searchVisible, setSearchVisible] = useState(false);
   const [filter, setFilter] = useState<'all' | 'unread' | 'flagged' | 'pinned' | 'attachments'>('all');
+
+  const [fontsLoaded] = useFonts({
+    Ubuntu_400Regular,
+    Ubuntu_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return null; // Ou um spinner de carregamento
+  }
 
   const handleFilterChange = (newFilter: 'all' | 'unread' | 'flagged' | 'pinned' | 'attachments') => {
     setFilter(newFilter);
@@ -82,85 +142,57 @@ const App: React.FC = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="Cadastro"
+          component={CadastroScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="Inbox"
           options={{ headerShown: false }}
         >
           {props => (
             <>
-              <DrawerNavigator 
-                onOpenFilterOptions={() => setModalVisible(true)} 
-                onOpenSearch={() => setSearchVisible(true)}
-                {...props} 
-              />
-
-              {/* Barra de Busca */}
-              {searchVisible && (
-                <View style={styles.searchBar}>
-                  <TextInput 
-                    style={styles.searchInput}
-                    placeholder="Buscar..."
-                    autoFocus
-                    onSubmitEditing={() => setSearchVisible(false)}
-                  />
-                  <TouchableOpacity 
-                    style={styles.searchCloseButton} 
-                    onPress={() => setSearchVisible(false)}
-                  >
-                    <Text style={styles.searchCloseButtonText}>Fechar</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-
+              <DrawerNavigator onOpenFilterOptions={() => setModalVisible(true)} {...props} />
               <Modal
                 transparent={true}
-                animationType="slide"
+                animationType="fade"
                 visible={modalVisible}
                 onRequestClose={() => setModalVisible(false)}
               >
-                <View style={styles.modalContainer}>
-                  <View style={styles.modalContent}>
-                    <TouchableOpacity onPress={() => handleFilterChange('all')}>
-                      <Text style={styles.optionText}>Todos</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleFilterChange('unread')}>
-                      <Text style={styles.optionText}>Não Lidos</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleFilterChange('flagged')}>
-                      <Text style={styles.optionText}>Sinalizados</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleFilterChange('pinned')}>
-                      <Text style={styles.optionText}>Fixos</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleFilterChange('attachments')}>
-                      <Text style={styles.optionText}>Com Anexos</Text>
-                    </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalBackdrop}
+                  activeOpacity={1}
+                  onPressOut={() => setModalVisible(false)}
+                >
+                  <View style={styles.modalContentTop}>
+                    {[
+                      { type: 'all', label: 'Todas', icon: 'mail-outline' },
+                      { type: 'unread', label: 'Não Lidas', icon: 'mail-unread-outline' },
+                      { type: 'flagged', label: 'Sinalizados', icon: 'flag-outline' },
+                      { type: 'pinned', label: 'Fixos', icon: 'pin-outline' },
+                      { type: 'attachments', label: 'Com Anexos', icon: 'attach-outline' },
+                    ].map((filterOption) => (
+                      <TouchableOpacity
+                        key={filterOption.type}
+                        style={styles.filterOption}
+                        onPress={() => handleFilterChange(filterOption.type as typeof filter)}
+                      >
+                        <Icon name={filterOption.icon} size={20} color="#000" />
+                        <Text style={styles.optionText}>
+                          {filterOption.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
                   </View>
-                </View>
-              </Modal>
-
-              <Modal
-                transparent={true}
-                animationType="slide"
-                visible={false} // A visibilidade do modal de nova mensagem é controlada na tela InboxScreen
-                onRequestClose={() => {}}
-              >
-                <View style={styles.newMessageContainer}>
-                  <NewMessageScreen />
-                  <TouchableOpacity 
-                    style={styles.closeButton} 
-                    onPress={() => {}}
-                  >
-                    <Text style={styles.closeButtonText}>Fechar</Text>
-                  </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
               </Modal>
             </>
           )}
         </Stack.Screen>
         <Stack.Screen
-          name="NovoEmail"
-          component={NewMessageScreen}
-          options={{ title: 'Nova Mensagem' }}
+          name="Calendar"
+          component={CalendarScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -168,77 +200,31 @@ const App: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  modalBackdrop: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalContent: {
-    width: 300,
+  modalContentTop: {
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 20,
+    marginTop: 60,
+    marginHorizontal: 20,
     alignItems: 'center',
   },
-  optionText: {
-    fontSize: 18,
-    marginVertical: 10,
-  },
-  searchBar: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#fff',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  filterOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    zIndex: 1000, // Para garantir que a barra de busca fique acima dos outros componentes
+    marginVertical: 10,
   },
-  searchInput: {
-    flex: 1,
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-  },
-  searchCloseButton: {
-    padding: 10,
+  optionText: {
+    fontSize: 20,
     marginLeft: 10,
-  },
-  searchCloseButtonText: {
-    fontSize: 16,
-    color: '#6200ea',
-  },
-  newMessageContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: height * 0.7, // 70% da altura da tela
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
-    elevation: 10, // Adiciona uma sombra para destacar o popup
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: 'red',
-    padding: 10,
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: '#fff',
-    fontSize: 16,
+    color: '#6f6f6f',
+    fontFamily: 'Ubuntu_700Bold',
+
   },
 });
 
 export default App;
-

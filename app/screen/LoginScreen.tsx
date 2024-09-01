@@ -1,39 +1,58 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import LoginInput from '../components/LoginInput';
-import Button from '../components/Button';
-import Link from '../components/Link';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import Button from '../components/Button'; 
+import Input from '../components/Input';
 
-interface LoginScreenProps {
-  navigation: any; // Tipo genérico para a navegação
-}
+const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const handleLogin = () => {
-    // Aqui você pode adicionar a lógica para autenticação
-    // Navegar para a tela "Inbox" após login
+    // lógica de autenticação
     navigation.navigate('Inbox');
   };
 
   return (
     <View style={styles.container}>
-      {/* Espaço para o logo */}
-      <View style={styles.logoContainer}>
-        <Image 
-          source={{ uri: 'https://via.placeholder.com/150' }} // Aqui você pode adicionar o caminho para a imagem do seu logo
+      <View style={styles.header}>
+        <Image
+          //source={require('/assets/images/logo.jpeg')}
           style={styles.logo}
-          resizeMode="contain"
         />
       </View>
-
-      {/* Texto "Acessar Conta" */}
       <Text style={styles.title}>Acessar Conta</Text>
 
-      <LoginInput label="E-mail" placeholder="Digite seu e-mail" />
-      <LoginInput label="Senha" placeholder="Digite sua senha" secureTextEntry />
-      <Link title="Esqueceu a sua senha?" onPress={() => console.log("Redefinir senha")} />
+      <Input 
+        label="E-mail"
+        placeholder="Digite seu e-mail"
+        onShowPassword={() => {}}
+        showPassword={false}
+        secureTextEntry={false}
+        onChangeText={setEmail}
+      /> 
+      
+      <Input 
+        label="Senha"
+        placeholder="Digite sua senha"
+        secureTextEntry
+        showPassword={false}
+        onShowPassword={() => {}}
+        onChangeText={setPassword}
+      />
+
+      <View style={styles.forgotPasswordContainer}>
+        <TouchableOpacity onPress={() => console.log("Redefinir senha")}>
+          <Text style={styles.forgotPasswordLink}>Esqueceu a sua senha?</Text>
+        </TouchableOpacity>
+      </View>
+
       <Button title="Entrar" onPress={handleLogin} />
-      <Link title="Cadastre-se" onPress={() => console.log("Cadastrar usuário")} />
+
+      <View style={styles.registerContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
+          <Text style={styles.registerLink}>Cadastre-se</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -44,19 +63,38 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
-  logoContainer: {
+  header: {
     alignItems: 'center',
-    marginBottom: 20, // Espaço abaixo do logo
+    marginBottom: 20,
   },
   logo: {
-    width: 150,  // Ajuste o tamanho conforme necessário
-    height: 150,
+    width: 100, 
+    height: 100, 
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 39,
+    fontFamily: 'Ubuntu_700Bold',
     textAlign: 'center',
-    marginBottom: 20, // Espaço entre o título e o próximo elemento
+    marginBottom: 20,
+  },
+  forgotPasswordContainer: {
+    alignItems: 'flex-end',
+    marginBottom: 20,
+  },
+  forgotPasswordLink: {
+    color: '#8172E8',
+    fontSize: 16,
+    fontFamily: 'Roboto',
+    padding: 5,
+  },
+  registerContainer: {
+    alignItems: 'center',
+  },
+  registerLink: {
+    color: '#8172E8',
+    fontSize: 16,
+    fontFamily: 'Roboto',
+    padding: 5,
   },
 });
 

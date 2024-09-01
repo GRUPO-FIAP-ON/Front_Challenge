@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
-import { FlatList, View, StyleSheet, Text, TouchableOpacity, Dimensions, TextInput } from 'react-native';
+import { FlatList, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import EmailItem from '../components/EmailItem';
-import BottomNavigation from '../components/BottomNavigation';
+import Footer from '../components/Footer';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
-interface Email {
-  id: string;
-  sender: string;
-  subject: string;
-  preview: string;
-  date: string;
-}
+import NewEmail from './NewEmail';
 
 type RootStackParamList = {
   Inbox: undefined;
@@ -21,86 +14,78 @@ type RootStackParamList = {
 
 type InboxScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Inbox'>;
 
-const emails: Email[] = [
-  { id: '1', sender: 'Thábata Orbeteli', subject: 'Assunto', preview: 'Lorem ipsum dolor...', date: 'terça-feira' },
-  { id: '2', sender: 'Yago Taguchi', subject: 'Assunto', preview: 'Lorem ipsum dolor...', date: 'segunda-feira' },
-  // Adicione mais itens...
+
+const emailsEstaSemana = [
+  { id: '1', sender: 'Thábata Orbeteli', subject: 'Assunto', preview: 'Lorem ipsum dolor...', date: '08/07/2024', flagged: false },
+  { id: '2', sender: 'Yago Taguchi', subject: 'Assunto', preview: 'Lorem ipsum dolor...', date: '09/07/2024', flagged: true },
 ];
 
-const { height } = Dimensions.get('window');
+const emailsSemanaPassada = [
+  { id: '3', sender: 'Eduardo Shoiti', subject: 'Assunto', preview: 'Lorem ipsum dolor...', date: '01/07/2024', flagged: false },
+];
+
+const emailsEsteMes = [
+  { id: '3', sender: ' Guilherme Avelino', subject: 'Assunto', preview: 'Lorem ipsum dolor...', date: '01/07/2024', flagged: false },
+];
 
 const InboxScreen: React.FC = () => {
   const navigation = useNavigation<InboxScreenNavigationProp>();
-  const [newMessageVisible, setNewMessageVisible] = useState(false);
-  const [searchVisible, setSearchVisible] = useState(false);
+  const [newEmailVisible, setNewEmailVisible] = useState(false);
+
+  const renderEmailItem = ({ item }: any) => (
+    <EmailItem
+      sender={item.sender}
+      subject={item.subject}
+      preview={item.preview}
+      date={item.date}
+      flagged={item.flagged} 
+    />
+  );
 
   return (
     <View style={styles.container}>
-      {/* Barra de Busca */}
-      {searchVisible && (
-        <View style={styles.searchContainer}>
-          <TextInput 
-            style={styles.searchInput} 
-            placeholder="Buscar..."
-          />
-          <TouchableOpacity onPress={() => setSearchVisible(false)}>
-            <Ionicons name="close" size={30} color="#000" />
-          </TouchableOpacity>
-        </View>
-      )}
-      
-      {/* Lista de Emails */}
-      <FlatList
-        data={emails}
-        renderItem={({ item }) => (
-          <EmailItem
-            sender={item.sender}
-            subject={item.subject}
-            preview={item.preview}
-            date={item.date}
-          />
-        )}
-        keyExtractor={item => item.id}
-      />
-
-      {/* Botão Flutuante para Novo Email */}
+    <FlatList
+      data={emailsEstaSemana}
+      renderItem={renderEmailItem}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={
+        <>
+          <Text style={styles.sectionHeader}>Esta Semana</Text>
+        </>
+      }
+    />
+    <FlatList
+      data={emailsSemanaPassada}
+      renderItem={renderEmailItem}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={
+        <>
+          <Text style={styles.sectionHeader}>Semana Passada</Text>
+        </>
+      }
+    />
+    <FlatList
+      data={emailsEsteMes}
+      renderItem={renderEmailItem}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={
+        <>
+          <Text style={styles.sectionHeader}>Este Mês</Text>
+        </>
+      }
+    />
       <TouchableOpacity 
         style={styles.floatingButton}
-        onPress={() => setNewMessageVisible(true)}
+        onPress={() => setNewEmailVisible(true)}
       >
         <Ionicons name="add" size={30} color="#fff" />
       </TouchableOpacity>
 
-      {/* Componente de Nova Mensagem */}
-      {newMessageVisible && (
-        <View style={styles.newMessageContainer}>
-          <Text style={styles.newMessageTitle}>Nova Mensagem</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Para"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Assunto"
-          />
-          <TextInput
-            style={styles.messageInput}
-            placeholder="Mensagem"
-            multiline
-          />
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Enviar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.closeButton} 
-            onPress={() => setNewMessageVisible(false)}
-          >
-            <Text style={styles.closeButtonText}>Fechar</Text>
-          </TouchableOpacity>
-        </View>
+      {newEmailVisible && (
+        <NewEmail onClose={() => setNewEmailVisible(false)} />
       )}
 
-      <BottomNavigation />
+      <Footer />
     </View>
   );
 };
@@ -110,82 +95,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f8f8',
   },
-  searchContainer: {
-    flexDirection: 'row',
+  sectionHeader: {
     padding: 10,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    alignItems: 'center',
-  },
-  searchInput: {
-    flex: 1,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    padding: 5,
+    backgroundColor: '#f0f0f0',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   floatingButton: {
     position: 'absolute',
     right: 20,
-    bottom: 20,
-    backgroundColor: '#6200ea',
+    bottom: 80, 
+    backgroundColor: '#5138EE',
     borderRadius: 50,
     padding: 15,
     elevation: 5,
-  },
-  newMessageContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: height * 0.7, // 70% da altura da tela
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
-    elevation: 10, // Adiciona uma sombra para destacar o popup
-  },
-  newMessageTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  input: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    marginVertical: 10,
-    paddingHorizontal: 10,
-    height: 40,
-  },
-  messageInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginVertical: 20,
-    height: 200,
-    textAlignVertical: 'top',
-  },
-  button: {
-    backgroundColor: '#6200ea',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  closeButton: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    backgroundColor: 'red',
-    padding: 10,
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: '#fff',
-    fontSize: 16,
   },
 });
 
