@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Button from '../components/Button'; n
+import Button from '../components/Button';
 import Input from '../components/Input';
 
 const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {

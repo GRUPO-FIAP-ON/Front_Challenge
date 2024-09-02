@@ -14,16 +14,18 @@ type RootStackParamList = {
 
 type InboxScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Inbox'>;
 
-
+// GET "/users/:userId/emails"
 const emailsEstaSemana = [
   { id: '1', sender: 'Thábata Orbeteli', subject: 'Assunto', preview: 'Lorem ipsum dolor...', date: '08/07/2024', flagged: false },
   { id: '2', sender: 'Yago Taguchi', subject: 'Assunto', preview: 'Lorem ipsum dolor...', date: '09/07/2024', flagged: true },
 ];
 
+// GET "/users/:userId/emails"
 const emailsSemanaPassada = [
   { id: '3', sender: 'Eduardo Shoiti', subject: 'Assunto', preview: 'Lorem ipsum dolor...', date: '01/07/2024', flagged: false },
 ];
 
+// GET "/users/:userId/emails"
 const emailsEsteMes = [
   { id: '3', sender: ' Guilherme Avelino', subject: 'Assunto', preview: 'Lorem ipsum dolor...', date: '01/07/2024', flagged: false },
 ];
