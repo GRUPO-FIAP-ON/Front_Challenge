@@ -96,4 +96,97 @@ const App: React.FC = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Lo
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Cadastro"
+          component={CadastroScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Inbox"
+          options={{ headerShown: false }}
+        >
+          {props => (
+            <>
+              <DrawerNavigator onOpenFilterOptions={() => setModalVisible(true)} {...props} />
+              <Modal
+                transparent={true}
+                animationType="fade"
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+              >
+                <TouchableOpacity
+                  style={[styles.modalBackdrop, { backgroundColor: isDarkTheme ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.5)' }]}
+                  activeOpacity={1}
+                  onPressOut={() => setModalVisible(false)}
+                >
+                  <View style={[styles.modalContentTop, { backgroundColor: isDarkTheme ? '#444' : '#fff' }]}>
+                    {[
+                      { type: 'all', label: 'Todas', icon: 'mail-outline' },
+                      { type: 'unread', label: 'Não Lidas', icon: 'mail-unread-outline' },
+                      { type: 'flagged', label: 'Sinalizados', icon: 'flag-outline' },
+                      { type: 'pinned', label: 'Fixos', icon: 'pin-outline' },
+                      { type: 'attachments', label: 'Com Anexos', icon: 'attach-outline' },
+                    ].map((filterOption) => (
+                      <TouchableOpacity
+                        key={filterOption.type}
+                        style={[styles.filterOption, { backgroundColor: isDarkTheme ? '#555' : '#fff' }]}
+                        onPress={() => handleFilterChange(filterOption.type as typeof filter)}
+                      >
+                        <Icon name={filterOption.icon} size={20} color={isDarkTheme ? '#ddd' : '#000'} />
+                        <Text style={[styles.optionText, { color: isDarkTheme ? '#ddd' : '#6f6f6f' }]}>
+                          {filterOption.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                    <RNButton title={isDarkTheme ? "Switch to Light Theme" : "Switch to Dark Theme"} onPress={toggleTheme} />
+                  </View>
+                </TouchableOpacity>
+              </Modal>
+            </>
+          )}
+        </Stack.Screen>
+        <Stack.Screen
+          name="Calendar"
+          component={CalendarScreen}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+const styles = StyleSheet.create({
+  modalBackdrop: {
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+  modalContentTop: {
+    borderRadius: 10,
+    padding: 20,
+    marginTop: 60,
+    marginHorizontal: 20,
+    alignItems: 'center',
+  },
+  filterOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+    padding: 10,
+    borderRadius: 5,
+    width: '100%',
+  },
+  optionText: {
+    fontSize: 16,
+    marginLeft: 10,
+  },
+});
+
+export default () => (
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
