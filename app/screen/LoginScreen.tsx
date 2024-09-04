@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Button from '../components/Button'; 
 import Input from '../components/Input';
+import { useTheme } from '../context/ThemeContext'; // Importar o contexto de tema
 
 const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { isDarkTheme } = useTheme(); // Usar o contexto de tema para verificar o tema atual
 
   const handleLogin = () => {
     // lógica de autenticação
@@ -13,14 +15,14 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
       <View style={styles.header}>
         <Image
           //source={require('/assets/images/logo.jpeg')}
           style={styles.logo}
         />
       </View>
-      <Text style={styles.title}>Acessar Conta</Text>
+      <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#000' }]}>Acessar Conta</Text>
 
       <Input 
         label="E-mail"
@@ -42,7 +44,9 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
       <View style={styles.forgotPasswordContainer}>
         <TouchableOpacity onPress={() => console.log("Redefinir senha")}>
-          <Text style={styles.forgotPasswordLink}>Esqueceu a sua senha?</Text>
+          <Text style={[styles.forgotPasswordLink, { color: isDarkTheme ? '#bbb' : '#8172E8' }]}>
+            Esqueceu a sua senha?
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -50,7 +54,9 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
       <View style={styles.registerContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
-          <Text style={styles.registerLink}>Cadastre-se</Text>
+          <Text style={[styles.registerLink, { color: isDarkTheme ? '#bbb' : '#8172E8' }]}>
+            Cadastre-se
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -82,7 +88,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   forgotPasswordLink: {
-    color: '#8172E8',
     fontSize: 16,
     fontFamily: 'Roboto',
     padding: 5,
@@ -91,7 +96,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   registerLink: {
-    color: '#8172E8',
     fontSize: 16,
     fontFamily: 'Roboto',
     padding: 5,

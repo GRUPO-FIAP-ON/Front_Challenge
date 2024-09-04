@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import NewEmail from './NewEmail';
+import { useTheme } from '../context/ThemeContext'; // Importar o contexto de tema
 
 type RootStackParamList = {
   Inbox: undefined;
@@ -33,6 +34,7 @@ const emailsEsteMes = [
 const InboxScreen: React.FC = () => {
   const navigation = useNavigation<InboxScreenNavigationProp>();
   const [newEmailVisible, setNewEmailVisible] = useState(false);
+  const { isDarkTheme } = useTheme(); // Usar o contexto de tema para verificar o tema atual
 
   const renderEmailItem = ({ item }: any) => (
     <EmailItem
@@ -45,39 +47,39 @@ const InboxScreen: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
-    <FlatList
-      data={emailsEstaSemana}
-      renderItem={renderEmailItem}
-      keyExtractor={(item) => item.id}
-      ListHeaderComponent={
-        <>
-          <Text style={styles.sectionHeader}>Esta Semana</Text>
-        </>
-      }
-    />
-    <FlatList
-      data={emailsSemanaPassada}
-      renderItem={renderEmailItem}
-      keyExtractor={(item) => item.id}
-      ListHeaderComponent={
-        <>
-          <Text style={styles.sectionHeader}>Semana Passada</Text>
-        </>
-      }
-    />
-    <FlatList
-      data={emailsEsteMes}
-      renderItem={renderEmailItem}
-      keyExtractor={(item) => item.id}
-      ListHeaderComponent={
-        <>
-          <Text style={styles.sectionHeader}>Este Mês</Text>
-        </>
-      }
-    />
+    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#f8f8f8' }]}>
+      <FlatList
+        data={emailsEstaSemana}
+        renderItem={renderEmailItem}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+          <>
+            <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#fff' : '#000' }]}>Esta Semana</Text>
+          </>
+        }
+      />
+      <FlatList
+        data={emailsSemanaPassada}
+        renderItem={renderEmailItem}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+          <>
+            <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#fff' : '#000' }]}>Semana Passada</Text>
+          </>
+        }
+      />
+      <FlatList
+        data={emailsEsteMes}
+        renderItem={renderEmailItem}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+          <>
+            <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#fff' : '#000' }]}>Este Mês</Text>
+          </>
+        }
+      />
       <TouchableOpacity 
-        style={styles.floatingButton}
+        style={[styles.floatingButton, { backgroundColor: isDarkTheme ? '#5138EE' : '#5138EE' }]}
         onPress={() => setNewEmailVisible(true)}
       >
         <Ionicons name="add" size={30} color="#fff" />
@@ -95,7 +97,6 @@ const InboxScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
   },
   sectionHeader: {
     padding: 10,
@@ -107,7 +108,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 20,
     bottom: 80, 
-    backgroundColor: '#5138EE',
     borderRadius: 50,
     padding: 15,
     elevation: 5,

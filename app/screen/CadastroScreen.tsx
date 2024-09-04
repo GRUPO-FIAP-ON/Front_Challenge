@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import { useTheme } from '../context/ThemeContext'; // Importar o contexto de tema
 
 const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { isDarkTheme } = useTheme(); // Usar o contexto de tema para verificar o tema atual
 
   const handleCadastro = () => {
     // Adicione aqui a lógica de autenticação
@@ -14,8 +16,8 @@ const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Cadastre-se</Text>
+    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
+      <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#000' }]}>Cadastre-se</Text>
 
       <Input 
         label="Nome Completo"
@@ -54,7 +56,6 @@ const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       />
 
       <Button title="Cadastrar-se" onPress={handleCadastro} />
-
     </View>
   );
 };
@@ -70,16 +71,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Ubuntu_700Bold',
     textAlign: 'center',
     marginBottom: 20,
-  },
-
-  registerContainer: {
-    alignItems: 'center',
-  },
-  registerLink: {
-    color: '#8172E8',
-    fontSize: 20,
-    fontFamily: 'Roboto',
-    padding: 5,
   },
 });
 
