@@ -15,12 +15,15 @@ import ArchiveScreen from './app/screen/ArchiveScreen';
 import SpamScreen from './app/screen/SpamScreen';
 import { Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { useFonts } from 'expo-font';
-import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { ThemeProvider, useTheme } from './app/context/ThemeContext';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpenFilterOptions }) => {
+  const { isDarkTheme } = useTheme();
+
   return (
     <Drawer.Navigator
       initialRouteName="Inbox"
@@ -29,7 +32,7 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
           <Icon
             name="menu"
             size={25}
-            color="#000"
+            color={isDarkTheme ? '#fff' : '#000'}
             style={{ marginLeft: 15 }}
             onPress={() => navigation.toggleDrawer()}
           />
@@ -38,7 +41,7 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
           <Icon
             name="funnel-outline"
             size={25}
-            color="#383838"
+            color={isDarkTheme ? '#fff' : '#383838'}
             style={{ marginRight: 15 }}
             onPress={onOpenFilterOptions}
           />
@@ -47,159 +50,85 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
         headerTitleStyle: {
           fontFamily: 'Ubuntu_700Bold',
           fontSize: 18,
+          color: isDarkTheme ? '#fff' : '#000',
         },
         drawerLabelStyle: {
-          fontFamily: 'Ubuntu_700Bold', 
+          fontFamily: 'Ubuntu_700Bold',
           fontSize: 16,
         },
-        drawerActiveTintColor: '#000',
-        drawerInactiveTintColor: '#383838', 
+        drawerActiveTintColor: isDarkTheme ? '#fff' : '#000',
+        drawerInactiveTintColor: isDarkTheme ? '#ddd' : '#383838',
       })}
     >
-      <Drawer.Screen
-        name="Caixa de entrada"
-        component={InboxScreen}
-        options={{
-          drawerIcon: ({ color, size }) => (
-            <Icon name="mail-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Enviados"
-        component={EmailSentScreen}
-        options={{
-          drawerIcon: ({ color, size }) => (
-            <Icon name="paper-plane-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Excluídos"
-        component={EmailDeletedScreen}
-        options={{
-          drawerIcon: ({ color, size }) => (
-            <Icon name="trash-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Rascunhos"
-        component={DraftScreen}
-        options={{
-          drawerIcon: ({ color, size }) => (
-            <Icon name="document-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Arquivo Morto"
-        component={ArchiveScreen}
-        options={{
-          drawerIcon: ({ color, size }) => (
-            <Icon name="archive-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Lixo eletrônico"
-        component={SpamScreen}
-        options={{
-          drawerIcon: ({ color, size }) => (
-            <Icon name="alert-circle-outline" size={size} color={color} />
-          ),
-        }}
-      />
+      {/* Drawer screens */}
+      <Drawer.Screen name="Caixa de entrada" component={InboxScreen} />
+      <Drawer.Screen name="Enviados" component={EmailSentScreen} />
+      <Drawer.Screen name="Excluídos" component={EmailDeletedScreen} />
+      <Drawer.Screen name="Rascunhos" component={DraftScreen} />
+      <Drawer.Screen name="Arquivo Morto" component={ArchiveScreen} />
+      <Drawer.Screen name="Lixo eletrônico" component={SpamScreen} />
     </Drawer.Navigator>
   );
 };
 
-
 const App: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [filter, setFilter] = useState<'all' | 'unread' | 'flagged' | 'pinned' | 'attachments'>('all');
-
   const [fontsLoaded] = useFonts({
     Ubuntu_400Regular,
     Ubuntu_700Bold,
   });
 
+  const { isDarkTheme, toggleTheme } = useTheme();
+
   if (!fontsLoaded) {
-    return null; // Ou um spinner de carregamento
+    return null; // Carregando as fontes
   }
 
-  const handleFilterChange = (newFilter: 'all' | 'unread' | 'flagged' | 'pinned' | 'attachments') => {
-    setFilter(newFilter);
-    setModalVisible(false);
-  };
-
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Cadastro"
-          component={CadastroScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Inbox"
-          options={{ headerShown: false }}
-        >
-          {props => (
-            <>
-              <DrawerNavigator onOpenFilterOptions={() => setModalVisible(true)} {...props} />
-              <Modal
-                transparent={true}
-                animationType="fade"
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-              >
-                <TouchableOpacity
-                  style={styles.modalBackdrop}
-                  activeOpacity={1}
-                  onPressOut={() => setModalVisible(false)}
+    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
+      <Button title={isDarkTheme ? "Tema Claro" : "Tema Escuro"} onPress={toggleTheme} />
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Cadastro" component={CadastroScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Inbox" options={{ headerShown: false }}>
+            {props => (
+              <>
+                <DrawerNavigator onOpenFilterOptions={() => setModalVisible(true)} {...props} />
+                {/* Modal para filtro */}
+                <Modal
+                  transparent={true}
+                  animationType="fade"
+                  visible={modalVisible}
+                  onRequestClose={() => setModalVisible(false)}
                 >
-                  <View style={styles.modalContentTop}>
-                    {[
-                      { type: 'all', label: 'Todas', icon: 'mail-outline' },
-                      { type: 'unread', label: 'Não Lidas', icon: 'mail-unread-outline' },
-                      { type: 'flagged', label: 'Sinalizados', icon: 'flag-outline' },
-                      { type: 'pinned', label: 'Fixos', icon: 'pin-outline' },
-                      { type: 'attachments', label: 'Com Anexos', icon: 'attach-outline' },
-                    ].map((filterOption) => (
-                      <TouchableOpacity
-                        key={filterOption.type}
-                        style={styles.filterOption}
-                        onPress={() => handleFilterChange(filterOption.type as typeof filter)}
-                      >
-                        <Icon name={filterOption.icon} size={20} color="#000" />
-                        <Text style={styles.optionText}>
-                          {filterOption.label}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </TouchableOpacity>
-              </Modal>
-            </>
-          )}
-        </Stack.Screen>
-        <Stack.Screen
-          name="Calendar"
-          component={CalendarScreen}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+                  <TouchableOpacity
+                    style={styles.modalBackdrop}
+                    activeOpacity={1}
+                    onPressOut={() => setModalVisible(false)}
+                  >
+                    <View style={styles.modalContentTop}>
+                      {/* Modal options */}
+                      <Text style={[styles.optionText, { color: isDarkTheme ? '#fff' : '#000' }]}>
+                        Filtrar Opções
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </Modal>
+              </>
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="Calendar" component={CalendarScreen} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   modalBackdrop: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -213,18 +142,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     alignItems: 'center',
   },
-  filterOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
   optionText: {
     fontSize: 20,
     marginLeft: 10,
     color: '#6f6f6f',
     fontFamily: 'Ubuntu_700Bold',
-
   },
 });
 
-export default App;
+export default function Main() {
+  return (
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  );
+}
