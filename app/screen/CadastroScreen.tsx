@@ -1,14 +1,16 @@
+// src/screen/CadastroScreen.tsx
+
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import { useTheme } from '../context/ThemeContext'; // Importar o contexto de tema
+import { useTheme } from '../context/ThemeContext'; 
 
 const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isDarkTheme } = useTheme(); // Usar o contexto de tema para verificar o tema atual
+  const { isDarkTheme } = useTheme(); 
 
   const handleCadastro = () => {
     // Adicione aqui a lógica de autenticação
@@ -48,14 +50,14 @@ const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
       <Input 
         label="Confirmar Senha"
-        placeholder="Digite sua senha novamente"
+        placeholder="Digite a senha novamente"
         secureTextEntry
         showPassword={showPassword}
         onShowPassword={() => setShowPassword(!showPassword)}
         onChangeText={setPassword}
       />
 
-      <Button title="Cadastrar-se" onPress={handleCadastro} />
+      <Button title="Cadastrar" onPress={handleCadastro} />
     </View>
   );
 };

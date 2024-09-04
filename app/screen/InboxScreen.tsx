@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import NewEmail from './NewEmail';
-import { useTheme } from '../context/ThemeContext'; // Importar o contexto de tema
+import { useTheme } from '../context/ThemeContext'; 
 
 type RootStackParamList = {
   Inbox: undefined;

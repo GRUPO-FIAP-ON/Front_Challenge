@@ -1,16 +1,17 @@
+// src/screen/CalendarScreen.tsx
+
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { useTheme } from '../context/ThemeContext'; // Importar o contexto de tema
+import { useTheme } from '../context/ThemeContext'; 
 
 const CalendarScreen: React.FC = () => {
   const [selected, setSelected] = useState('');
-  const { isDarkTheme } = useTheme(); // Usar o contexto de tema para verificar o tema atual
+  const { isDarkTheme } = useTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
-      <Text
-        style={[styles.header, { color: isDarkTheme ? '#fff' : '#000' }]}>
+      <Text style={[styles.header, { color: isDarkTheme ? '#fff' : '#000' }]}>
         Calendário
       </Text>
       <Calendar

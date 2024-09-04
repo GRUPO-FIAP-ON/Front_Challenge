@@ -1,13 +1,15 @@
+// src/screen/LoginScreen.tsx
+
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Button from '../components/Button'; 
 import Input from '../components/Input';
-import { useTheme } from '../context/ThemeContext'; // Importar o contexto de tema
+import { useTheme } from '../context/ThemeContext'; 
 
 const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isDarkTheme } = useTheme(); // Usar o contexto de tema para verificar o tema atual
+  const { isDarkTheme } = useTheme(); 
 
   const handleLogin = () => {
     // lógica de autenticação

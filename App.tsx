@@ -16,7 +16,7 @@ import SpamScreen from './app/screen/SpamScreen';
 import { Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { useFonts } from 'expo-font';
 import { Modal, View, Text, StyleSheet, TouchableOpacity, Button as RNButton } from 'react-native';
-import { ThemeProvider, useTheme } from './context/ThemeContext'; // Importar ThemeProvider
+import { ThemeProvider, useTheme } from './app/context/ThemeContext'; // Importar ThemeProvider
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
