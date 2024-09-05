@@ -1,5 +1,3 @@
-// src/screen/LoginScreen.tsx
-
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Button from '../components/Button';
@@ -12,8 +10,11 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const { isDarkTheme } = useTheme();
 
   const handleLogin = () => {
-    // lógica de autenticação
-    navigation.navigate('Inbox');
+    // Lógica de autenticação
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Home' }],
+    });
   };
 
   return (
