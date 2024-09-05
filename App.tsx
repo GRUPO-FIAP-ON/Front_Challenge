@@ -1,4 +1,3 @@
-// ./app/app.tsx
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -195,4 +194,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default () => (
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
