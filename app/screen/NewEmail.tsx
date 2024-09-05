@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet, Dimensions, Text } from 'react-native';
 import Button from '../components/Button';
+import { useTheme } from '../context/ThemeContext'; // Ajuste o caminho conforme necessário
 
 const { height } = Dimensions.get('window');
 
@@ -11,37 +12,42 @@ interface NewEmailProps {
 const NewEmail: React.FC<NewEmailProps> = ({ onClose }) => {
   const [to, setTo] = useState('');
   const [subject, setSubject] = useState('');
-  const [Email, setEmail] = useState('');
+  const [email, setEmail] = useState('');
+
+  const { isDarkTheme } = useTheme();
 
   const handleSend = () => {
     // Lógica de envio do e-mail
-    console.log("E-mail enviado:", { to, subject, Email });
+    console.log("E-mail enviado:", { to, subject, email });
   };
 
   return (
-    <View style={styles.newEmailContainer}>
+    <View style={[styles.newEmailContainer, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
       <View style={styles.headerContainer}>
-        <Text style={styles.newEmailTitle}>Nova Mensagem</Text>
-        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+        <Text style={[styles.newEmailTitle, { color: isDarkTheme ? '#fff' : '#000' }]}>Nova Mensagem</Text>
+        <TouchableOpacity style={[styles.closeButton, { backgroundColor: isDarkTheme ? '#f44336' : '#f44336' }]} onPress={onClose}>
           <Text style={styles.closeButtonText}>X</Text>
         </TouchableOpacity>
       </View>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderBottomColor: isDarkTheme ? '#666' : '#ccc' }]}
         placeholder="Para"
+        placeholderTextColor={isDarkTheme ? '#bbb' : '#666'}
         value={to}
         onChangeText={setTo}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderBottomColor: isDarkTheme ? '#666' : '#ccc' }]}
         placeholder="Assunto"
+        placeholderTextColor={isDarkTheme ? '#bbb' : '#666'}
         value={subject}
         onChangeText={setSubject}
       />
       <TextInput
-        style={styles.EmailInput}
+        style={[styles.EmailInput, { borderColor: isDarkTheme ? '#666' : '#ccc', color: isDarkTheme ? '#fff' : '#000' }]}
         placeholder="Mensagem"
-        value={Email}
+        placeholderTextColor={isDarkTheme ? '#bbb' : '#666'}
+        value={email}
         onChangeText={setEmail}
         multiline
       />
@@ -57,7 +63,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: height * 0.7, // 70% da altura da tela
-    backgroundColor: '#fff',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20,
@@ -74,7 +79,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   closeButton: {
-    backgroundColor: '#f44336',
     borderRadius: 15,
     width: 30,
     height: 30,
@@ -88,14 +92,12 @@ const styles = StyleSheet.create({
   },
   input: {
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
     marginVertical: 10,
     paddingHorizontal: 10,
     height: 40,
   },
   EmailInput: {
     borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 5,
     padding: 10,
     marginVertical: 20,
