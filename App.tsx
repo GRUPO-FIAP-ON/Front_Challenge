@@ -1,3 +1,4 @@
+// ./app/app.tsx
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -17,62 +18,28 @@ import { Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { useFonts } from 'expo-font';
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemeProvider, useTheme } from './app/context/ThemeContext';
+import Header from './app/screen/Header';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpenFilterOptions }) => {
-  const { isDarkTheme, toggleTheme } = useTheme();
+  const { isDarkTheme } = useTheme();
 
   return (
     <Drawer.Navigator
       initialRouteName="Inbox"
       screenOptions={({ navigation }) => ({
-        headerLeft: () => (
-          <Icon
-            name="menu"
-            size={25}
-            color={isDarkTheme ? '#FFFFFF' : '#000'}
-            style={{ marginLeft: 15 }}
-            onPress={() => navigation.toggleDrawer()}
-          />
-        ),
-        headerRight: () => (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Icon
-              name="funnel-outline"
-              size={25}
-              color={isDarkTheme ? '#ddd' : '#383838'}
-              style={{ marginRight: 15 }}
-              onPress={onOpenFilterOptions}
-            />
-            <TouchableOpacity
-              onPress={toggleTheme}
-              style={{ marginRight: 15 }}
-            >
-              <Icon
-                name={isDarkTheme ? "moon-outline" : "sunny-outline"}
-                size={25}
-                color={isDarkTheme ? '#ddd' : '#383838'}
-              />
-            </TouchableOpacity>
-          </View>
-        ),
-        headerTitleAlign: 'center',
-        headerTitleStyle: {
-          fontFamily: 'Ubuntu_700Bold',
-          fontSize: 18,
-          color: isDarkTheme ? '#FFFFFF' : '#000',
-        },
+        header: () => <Header navigation={navigation} />, // Usa o Header
         drawerStyle: {
-          backgroundColor: isDarkTheme ? '#000000' : '#000000',
+          backgroundColor: isDarkTheme ? '#000000' : '#FFFFFF',
         },
         drawerLabelStyle: {
           fontFamily: 'Ubuntu_700Bold',
           fontSize: 16,
-          color: isDarkTheme ? '#FFFFFF' : '#000',
+          color: isDarkTheme ? '#FFFFFF' : '#000000',
         },
-        drawerActiveTintColor: isDarkTheme ? '#FFFFFF' : '#000',
+        drawerActiveTintColor: isDarkTheme ? '#FFFFFF' : '#000000',
         drawerInactiveTintColor: isDarkTheme ? '#ddd' : '#383838',
         drawerItemStyle: {
           marginVertical: 5,
@@ -164,7 +131,7 @@ const App: React.FC = () => {
                   activeOpacity={1}
                   onPressOut={() => setModalVisible(false)}
                 >
-                  <View style={[styles.modalContentTop, { backgroundColor: isDarkTheme ? '#222' : '#FFFFFF' }]}>
+                  <View style={[styles.modalContent, { backgroundColor: isDarkTheme ? '#222' : '#FFFFFF' }]}>
                     {[
                       { type: 'all', label: 'Todas', icon: 'mail-outline' },
                       { type: 'unread', label: 'Não Lidas', icon: 'mail-unread-outline' },
@@ -204,30 +171,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
   },
-  modalContentTop: {
+  modalContent: {
     borderRadius: 10,
     padding: 20,
-    marginTop: 60,
-    marginHorizontal: 20,
-    alignItems: 'center',
+    margin: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   filterOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
+    padding: 10,
     borderRadius: 5,
-    marginBottom: 10,
-    width: '100%',
+    marginVertical: 5,
   },
   optionText: {
     marginLeft: 10,
-    fontFamily: 'Ubuntu_400Regular',
     fontSize: 16,
+    fontFamily: 'Ubuntu_400Regular',
   },
 });
 
-export default () => (
-  <ThemeProvider>
-    <App />
-  </ThemeProvider>
-);
+export default App;
