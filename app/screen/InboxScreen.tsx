@@ -1,3 +1,5 @@
+// src/screen/InboxScreen.tsx
+
 import React, { useState } from 'react';
 import { FlatList, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import EmailItem from '../components/EmailItem';
@@ -34,7 +36,7 @@ const emailsEsteMes = [
 const InboxScreen: React.FC = () => {
   const navigation = useNavigation<InboxScreenNavigationProp>();
   const [newEmailVisible, setNewEmailVisible] = useState(false);
-  const { isDarkTheme } = useTheme(); // Usar o contexto de tema para verificar o tema atual
+  const { isDarkTheme } = useTheme(); 
 
   const renderEmailItem = ({ item }: any) => (
     <EmailItem
@@ -103,6 +105,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     fontWeight: 'bold',
     fontSize: 16,
+    fontFamily: 'Ubuntu_700Bold', // Fonte alterada para a fonte do tema
   },
   floatingButton: {
     position: 'absolute',

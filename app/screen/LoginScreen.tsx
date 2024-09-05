@@ -1,5 +1,3 @@
-// src/screen/LoginScreen.tsx
-
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Button from '../components/Button'; 
@@ -91,7 +89,7 @@ const styles = StyleSheet.create({
   },
   forgotPasswordLink: {
     fontSize: 16,
-    fontFamily: 'Roboto',
+    fontFamily: 'Ubuntu_400Regular', // Fonte alterada para a fonte do tema
     padding: 5,
   },
   registerContainer: {
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
   },
   registerLink: {
     fontSize: 16,
-    fontFamily: 'Roboto',
+    fontFamily: 'Ubuntu_400Regular', // Fonte alterada para a fonte do tema
     padding: 5,
   },
 });

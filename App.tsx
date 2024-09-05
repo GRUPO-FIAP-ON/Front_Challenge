@@ -15,7 +15,7 @@ import ArchiveScreen from './app/screen/ArchiveScreen';
 import SpamScreen from './app/screen/SpamScreen';
 import { Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { useFonts } from 'expo-font';
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Button as RNButton } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemeProvider, useTheme } from './app/context/ThemeContext'; // Importar ThemeProvider
 
 const Stack = createStackNavigator();
@@ -38,13 +38,25 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
           />
         ),
         headerRight: () => (
-          <Icon
-            name="funnel-outline"
-            size={25}
-            color={isDarkTheme ? '#ddd' : '#383838'}
-            style={{ marginRight: 15 }}
-            onPress={onOpenFilterOptions}
-          />
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Icon
+              name="funnel-outline"
+              size={25}
+              color={isDarkTheme ? '#ddd' : '#383838'}
+              style={{ marginRight: 15 }}
+              onPress={onOpenFilterOptions}
+            />
+            <TouchableOpacity
+              onPress={toggleTheme}
+              style={{ marginRight: 15 }}
+            >
+              <Icon
+                name={isDarkTheme ? "moon-outline" : "sunny-outline"}
+                size={25}
+                color={isDarkTheme ? '#ddd' : '#383838'}
+              />
+            </TouchableOpacity>
+          </View>
         ),
         headerTitleAlign: 'center',
         headerTitleStyle: {
@@ -142,7 +154,6 @@ const App: React.FC = () => {
                         </Text>
                       </TouchableOpacity>
                     ))}
-                    <RNButton title={isDarkTheme ? "Switch to Light Theme" : "Switch to Dark Theme"} onPress={toggleTheme} />
                   </View>
                 </TouchableOpacity>
               </Modal>
