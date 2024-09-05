@@ -1,36 +1,53 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useTheme } from '../context/ThemeContext';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../context/ThemeContext';
 
-const Header: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpenFilterOptions }) => {
-  const { isDarkTheme } = useTheme();
+interface HeaderProps {
+  onOpenDrawer: () => void;
+  onOpenFilterOptions: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onOpenDrawer, onOpenFilterOptions }) => {
+  const { toggleTheme, isDarkTheme } = useTheme();
 
   return (
-    <View style={[styles.header, { backgroundColor: isDarkTheme ? '#333' : '#f8f8f8' }]}>
-      <TouchableOpacity onPress={onOpenFilterOptions}>
-        <Ionicons name="filter" size={24} color={isDarkTheme ? '#ddd' : '#333'} />
+    <View style={[styles.header, { backgroundColor: isDarkTheme ? '#222' : '#fff' }]}>
+      <TouchableOpacity onPress={onOpenDrawer} style={styles.iconButton}>
+        <Ionicons name="menu-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
       </TouchableOpacity>
-      <Text style={[styles.title, { color: isDarkTheme ? '#ddd' : '#333' }]}>Aplicativo de Email</Text>
-      <View style={styles.iconPlaceholder} />
+      <Text style={[styles.title, { color: isDarkTheme ? '#ddd' : '#000' }]}>Locamail</Text>
+      <View style={styles.iconsContainer}>
+        <TouchableOpacity onPress={onOpenFilterOptions} style={styles.iconButton}>
+          <Ionicons name="funnel-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={toggleTheme} style={styles.iconButton}>
+          <Ionicons name={isDarkTheme ? 'sunny-outline' : 'moon-outline'} size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   header: {
-    height: 60,
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    alignItems: 'center',
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
   },
-  iconPlaceholder: {
-    width: 24,
+  iconsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconButton: {
+    marginLeft: 15,
   },
 });
 
