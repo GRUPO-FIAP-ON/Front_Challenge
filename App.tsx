@@ -16,7 +16,7 @@ import SpamScreen from './app/screen/SpamScreen';
 import { Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { useFonts } from 'expo-font';
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { ThemeProvider, useTheme } from './app/context/ThemeContext'; // Importar ThemeProvider
+import { ThemeProvider, useTheme } from './app/context/ThemeContext';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -64,22 +64,51 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
           fontSize: 18,
           color: isDarkTheme ? '#FFFFFF' : '#000',
         },
+        drawerStyle: {
+          backgroundColor: isDarkTheme ? '#333' : '#fff',
+        },
         drawerLabelStyle: {
-          fontFamily: 'Ubuntu_700Bold', 
+          fontFamily: 'Ubuntu_700Bold',
           fontSize: 16,
           color: isDarkTheme ? '#FFFFFF' : '#000',
         },
         drawerActiveTintColor: isDarkTheme ? '#FFFFFF' : '#000',
         drawerInactiveTintColor: isDarkTheme ? '#ddd' : '#383838',
+        drawerItemStyle: {
+          marginVertical: 5,
+        },
       })}
     >
-      {/* Screens */}
-      <Drawer.Screen name="Caixa de entrada" component={InboxScreen} options={{ drawerIcon: ({ color, size }) => <Icon name="mail-outline" size={size} color={color} /> }} />
-      <Drawer.Screen name="Enviados" component={EmailSentScreen} options={{ drawerIcon: ({ color, size }) => <Icon name="paper-plane-outline" size={size} color={color} /> }} />
-      <Drawer.Screen name="Excluídos" component={EmailDeletedScreen} options={{ drawerIcon: ({ color, size }) => <Icon name="trash-outline" size={size} color={color} /> }} />
-      <Drawer.Screen name="Rascunhos" component={DraftScreen} options={{ drawerIcon: ({ color, size }) => <Icon name="document-outline" size={size} color={color} /> }} />
-      <Drawer.Screen name="Arquivo Morto" component={ArchiveScreen} options={{ drawerIcon: ({ color, size }) => <Icon name="archive-outline" size={size} color={color} /> }} />
-      <Drawer.Screen name="Lixo eletrônico" component={SpamScreen} options={{ drawerIcon: ({ color, size }) => <Icon name="alert-circle-outline" size={size} color={color} /> }} />
+      <Drawer.Screen 
+        name="Caixa de entrada" 
+        component={InboxScreen} 
+        options={{ drawerIcon: ({ color, size }) => <Icon name="mail-outline" size={size} color={color} /> }} 
+      />
+      <Drawer.Screen 
+        name="Enviados" 
+        component={EmailSentScreen} 
+        options={{ drawerIcon: ({ color, size }) => <Icon name="paper-plane-outline" size={size} color={color} /> }} 
+      />
+      <Drawer.Screen 
+        name="Excluídos" 
+        component={EmailDeletedScreen} 
+        options={{ drawerIcon: ({ color, size }) => <Icon name="trash-outline" size={size} color={color} /> }} 
+      />
+      <Drawer.Screen 
+        name="Rascunhos" 
+        component={DraftScreen} 
+        options={{ drawerIcon: ({ color, size }) => <Icon name="document-outline" size={size} color={color} /> }} 
+      />
+      <Drawer.Screen 
+        name="Arquivo Morto" 
+        component={ArchiveScreen} 
+        options={{ drawerIcon: ({ color, size }) => <Icon name="archive-outline" size={size} color={color} /> }} 
+      />
+      <Drawer.Screen 
+        name="Lixo eletrônico" 
+        component={SpamScreen} 
+        options={{ drawerIcon: ({ color, size }) => <Icon name="alert-circle-outline" size={size} color={color} /> }} 
+      />
     </Drawer.Navigator>
   );
 };
@@ -185,14 +214,15 @@ const styles = StyleSheet.create({
   filterOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 10,
-    padding: 10,
+    padding: 15,
     borderRadius: 5,
+    marginBottom: 10,
     width: '100%',
   },
   optionText: {
-    fontSize: 16,
     marginLeft: 10,
+    fontFamily: 'Ubuntu_400Regular',
+    fontSize: 16,
   },
 });
 

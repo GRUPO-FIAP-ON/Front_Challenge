@@ -1,16 +1,14 @@
-// src/screen/CadastroScreen.tsx
-
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import { useTheme } from '../context/ThemeContext'; 
+import { useTheme } from '../context/ThemeContext';
 
 const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isDarkTheme } = useTheme(); 
+  const { isDarkTheme } = useTheme();
 
   const handleCadastro = () => {
     // Adicione aqui a lógica de autenticação

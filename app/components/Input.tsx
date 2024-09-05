@@ -1,6 +1,9 @@
+// src/components/Input.tsx
+
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTheme } from '../context/ThemeContext';
 
 interface InputProps {
   label: string;
@@ -19,15 +22,17 @@ const Input: React.FC<InputProps> = ({
   onShowPassword,
   onChangeText,
 }) => {
+  const { isDarkTheme } = useTheme();
+
   return (
     <View style={styles.inputContainer}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.label, { color: isDarkTheme ? '#FFFFFF' : '#777777' }]}>{label}</Text>
       <View style={styles.passwordContainer}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: isDarkTheme ? '#FFFFFF' : '#000000', borderColor: isDarkTheme ? '#777777' : '#777777' }]}
           placeholder={placeholder}
           secureTextEntry={secureTextEntry && !showPassword}
-          placeholderTextColor="#000" 
+          placeholderTextColor={isDarkTheme ? '#888888' : '#777777'} 
           onChangeText={onChangeText} 
         />
         {secureTextEntry && (
@@ -35,7 +40,7 @@ const Input: React.FC<InputProps> = ({
             <Icon
               name={showPassword ? 'eye-off-outline' : 'eye-outline'}
               size={24}
-              color="#000"
+              color={isDarkTheme ? '#FFFFFF' : '#000000'}
             />
           </TouchableOpacity>
         )}
@@ -52,16 +57,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Roboto',
     marginBottom: 5,
-    color: '#777777',
     marginLeft: 15,
   },
   input: {
     height: 55,
-    borderColor: '#777777',
     borderWidth: 1,
     borderRadius: 25, 
     paddingHorizontal: 10,
-    color: '#000000', 
   },
   passwordContainer: {
     position: 'relative',

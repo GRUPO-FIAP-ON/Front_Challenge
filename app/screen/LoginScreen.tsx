@@ -1,13 +1,15 @@
+// src/screen/LoginScreen.tsx
+
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import Button from '../components/Button'; 
+import Button from '../components/Button';
 import Input from '../components/Input';
-import { useTheme } from '../context/ThemeContext'; 
+import { useTheme } from '../context/ThemeContext';
 
 const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { isDarkTheme } = useTheme(); 
+  const { isDarkTheme } = useTheme();
 
   const handleLogin = () => {
     // lógica de autenticação
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
   },
   forgotPasswordLink: {
     fontSize: 16,
-    fontFamily: 'Ubuntu_400Regular', // Fonte alterada para a fonte do tema
+    fontFamily: 'Ubuntu_400Regular',
     padding: 5,
   },
   registerContainer: {
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
   },
   registerLink: {
     fontSize: 16,
-    fontFamily: 'Ubuntu_400Regular', // Fonte alterada para a fonte do tema
+    fontFamily: 'Ubuntu_400Regular',
     padding: 5,
   },
 });
