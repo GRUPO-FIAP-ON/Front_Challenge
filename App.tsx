@@ -18,7 +18,7 @@ import { Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { useFonts } from 'expo-font';
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemeProvider, useTheme } from './app/context/ThemeContext';
-import Header from './app/screen/Header';
+import Header from './app/components/Header';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
