@@ -10,7 +10,6 @@ import { Ionicons } from '@expo/vector-icons';
 import LoginScreen from './app/screen/LoginScreen';
 import CadastroScreen from './app/screen/CadastroScreen';
 import InboxScreen from './app/screen/InboxScreen';
-import CalendarScreen from './app/screen/CalendarScreen';
 import EmailSentScreen from './app/screen/EmailSentScreen';
 import EmailDeletedScreen from './app/screen/EmailDeletedScreen';
 import DraftScreen from './app/screen/DraftScreen';
@@ -24,12 +23,18 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpenFilterOptions }) => {
   const { isDarkTheme } = useTheme();
-
+  
   return (
     <Drawer.Navigator
       initialRouteName="Inbox"
-      screenOptions={{
-        header: () => <Header onOpenDrawer={() => {}} onOpenFilterOptions={onOpenFilterOptions} />,
+      screenOptions={({ route }) => ({
+        header: () => (
+          <Header
+            onOpenDrawer={() => {}}
+            onOpenFilterOptions={onOpenFilterOptions}
+            title={route.name} // Passa o nome da rota como título
+          />
+        ),
         drawerStyle: {
           backgroundColor: isDarkTheme ? '#222' : '#fff',
         },
@@ -42,37 +47,37 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
         drawerItemStyle: {
           marginVertical: 5,
         },
-      }}
+      })}
     >
-      <Drawer.Screen 
-        name="Inbox" 
-        component={InboxScreen} 
-        options={{ drawerIcon: ({ color, size }) => <Ionicons name="mail-outline" size={size} color={color} /> }} 
+      <Drawer.Screen
+        name="Caixa de Entrada"
+        component={InboxScreen}
+        options={{ drawerIcon: ({ color, size }) => <Ionicons name="mail-outline" size={size} color={color} /> }}
       />
-      <Drawer.Screen 
-        name="Email Sent" 
-        component={EmailSentScreen} 
-        options={{ drawerIcon: ({ color, size }) => <Ionicons name="paper-plane-outline" size={size} color={color} /> }} 
+      <Drawer.Screen
+        name="Enviados"
+        component={EmailSentScreen}
+        options={{ drawerIcon: ({ color, size }) => <Ionicons name="paper-plane-outline" size={size} color={color} /> }}
       />
-      <Drawer.Screen 
-        name="Email Deleted" 
-        component={EmailDeletedScreen} 
-        options={{ drawerIcon: ({ color, size }) => <Ionicons name="trash-outline" size={size} color={color} /> }} 
+      <Drawer.Screen
+        name="Excluídos"
+        component={EmailDeletedScreen}
+        options={{ drawerIcon: ({ color, size }) => <Ionicons name="trash-outline" size={size} color={color} /> }}
       />
-      <Drawer.Screen 
-        name="Drafts" 
-        component={DraftScreen} 
-        options={{ drawerIcon: ({ color, size }) => <Ionicons name="document-outline" size={size} color={color} /> }} 
+      <Drawer.Screen
+        name="Rascunhos"
+        component={DraftScreen}
+        options={{ drawerIcon: ({ color, size }) => <Ionicons name="document-outline" size={size} color={color} /> }}
       />
-      <Drawer.Screen 
-        name="Archive" 
-        component={ArchiveScreen} 
-        options={{ drawerIcon: ({ color, size }) => <Ionicons name="archive-outline" size={size} color={color} /> }} 
+      <Drawer.Screen
+        name="Arquivo Morto"
+        component={ArchiveScreen}
+        options={{ drawerIcon: ({ color, size }) => <Ionicons name="archive-outline" size={size} color={color} /> }}
       />
-      <Drawer.Screen 
-        name="Spam" 
-        component={SpamScreen} 
-        options={{ drawerIcon: ({ color, size }) => <Ionicons name="alert-circle-outline" size={size} color={color} /> }} 
+      <Drawer.Screen
+        name="Lixo Eletrônico"
+        component={SpamScreen}
+        options={{ drawerIcon: ({ color, size }) => <Ionicons name="alert-circle-outline" size={size} color={color} /> }}
       />
     </Drawer.Navigator>
   );
@@ -110,6 +115,7 @@ const App: React.FC = () => {
           </Stack.Screen>
         </Stack.Navigator>
 
+        {/* Modal para exibir os filtros */}
         <Modal
           visible={modalVisible}
           transparent={true}
@@ -119,30 +125,37 @@ const App: React.FC = () => {
           <View style={[styles.modalContainer, { backgroundColor: isDarkTheme ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.5)' }]}>
             <View style={[styles.modalContent, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
               <Text style={[styles.modalTitle, { color: isDarkTheme ? '#ddd' : '#000' }]}>Filtros</Text>
+
+              {/* Filtro: Todas */}
               <TouchableOpacity style={styles.filterOption}>
                 <Ionicons name="mail-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Inbox</Text>
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Todas</Text>
               </TouchableOpacity>
+
+              {/* Filtro: Não lidas */}
               <TouchableOpacity style={styles.filterOption}>
-                <Ionicons name="paper-plane-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Sent</Text>
+                <Ionicons name="eye-off-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Não lidas</Text>
               </TouchableOpacity>
+
+              {/* Filtro: Sinalizados */}
               <TouchableOpacity style={styles.filterOption}>
-                <Ionicons name="trash-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Deleted</Text>
+                <Ionicons name="flag-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Sinalizados</Text>
               </TouchableOpacity>
+
+              {/* Filtro: Fixos */}
               <TouchableOpacity style={styles.filterOption}>
-                <Ionicons name="document-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Drafts</Text>
+                <Ionicons name="bookmark-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Fixos</Text>
               </TouchableOpacity>
+
+              {/* Filtro: Com Anexos */}
               <TouchableOpacity style={styles.filterOption}>
-                <Ionicons name="archive-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Archive</Text>
+                <Ionicons name="attach-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Com Anexos</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.filterOption}>
-                <Ionicons name="alert-circle-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Spam</Text>
-              </TouchableOpacity>
+
               <TouchableOpacity onPress={handleCloseFilterOptions}>
                 <Text style={[styles.closeButton, { color: isDarkTheme ? '#ddd' : '#000' }]}>Fechar</Text>
               </TouchableOpacity>
@@ -192,4 +205,3 @@ export default () => (
     <App />
   </ThemeProvider>
 );
-

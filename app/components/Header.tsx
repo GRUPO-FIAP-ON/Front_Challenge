@@ -6,9 +6,10 @@ import { useTheme } from '../context/ThemeContext';
 interface HeaderProps {
   onOpenDrawer: () => void;
   onOpenFilterOptions: () => void;
+  title: string; // Adiciona a prop title
 }
 
-const Header: React.FC<HeaderProps> = ({ onOpenDrawer, onOpenFilterOptions }) => {
+const Header: React.FC<HeaderProps> = ({ onOpenDrawer, onOpenFilterOptions, title }) => {
   const { toggleTheme, isDarkTheme } = useTheme();
 
   return (
@@ -16,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenDrawer, onOpenFilterOptions }) =>
       <TouchableOpacity onPress={onOpenDrawer} style={styles.iconButton}>
         <Ionicons name="menu-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
       </TouchableOpacity>
-      <Text style={[styles.title, { color: isDarkTheme ? '#ddd' : '#000' }]}>Locamail</Text>
+      <Text style={[styles.title, { color: isDarkTheme ? '#ddd' : '#000' }]}>{title}</Text>
       <View style={styles.iconsContainer}>
         <TouchableOpacity onPress={onOpenFilterOptions} style={styles.iconButton}>
           <Ionicons name="funnel-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
@@ -51,4 +52,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Header;
+export default Header; 
