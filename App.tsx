@@ -6,6 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import { Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
+import { Ionicons } from '@expo/vector-icons';
 import LoginScreen from './app/screen/LoginScreen';
 import CadastroScreen from './app/screen/CadastroScreen';
 import InboxScreen from './app/screen/InboxScreen';
@@ -15,9 +16,8 @@ import EmailDeletedScreen from './app/screen/EmailDeletedScreen';
 import DraftScreen from './app/screen/DraftScreen';
 import ArchiveScreen from './app/screen/ArchiveScreen';
 import SpamScreen from './app/screen/SpamScreen';
-import Header from './app/components/Header'; // Importando o Header
+import Header from './app/components/Header';
 import { ThemeProvider, useTheme } from './app/context/ThemeContext';
-import { Ionicons } from '@expo/vector-icons';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -45,32 +45,32 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
       }}
     >
       <Drawer.Screen 
-        name="Caixa de entrada" 
+        name="Inbox" 
         component={InboxScreen} 
         options={{ drawerIcon: ({ color, size }) => <Ionicons name="mail-outline" size={size} color={color} /> }} 
       />
       <Drawer.Screen 
-        name="Enviados" 
+        name="Email Sent" 
         component={EmailSentScreen} 
         options={{ drawerIcon: ({ color, size }) => <Ionicons name="paper-plane-outline" size={size} color={color} /> }} 
       />
       <Drawer.Screen 
-        name="Excluídos" 
+        name="Email Deleted" 
         component={EmailDeletedScreen} 
         options={{ drawerIcon: ({ color, size }) => <Ionicons name="trash-outline" size={size} color={color} /> }} 
       />
       <Drawer.Screen 
-        name="Rascunhos" 
+        name="Drafts" 
         component={DraftScreen} 
         options={{ drawerIcon: ({ color, size }) => <Ionicons name="document-outline" size={size} color={color} /> }} 
       />
       <Drawer.Screen 
-        name="Arquivo Morto" 
+        name="Archive" 
         component={ArchiveScreen} 
         options={{ drawerIcon: ({ color, size }) => <Ionicons name="archive-outline" size={size} color={color} /> }} 
       />
       <Drawer.Screen 
-        name="Lixo eletrônico" 
+        name="Spam" 
         component={SpamScreen} 
         options={{ drawerIcon: ({ color, size }) => <Ionicons name="alert-circle-outline" size={size} color={color} /> }} 
       />
@@ -80,6 +80,7 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
 
 const App: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const { isDarkTheme } = useTheme();
 
   const handleOpenFilterOptions = () => {
     setModalVisible(true);
@@ -88,6 +89,15 @@ const App: React.FC = () => {
   const handleCloseFilterOptions = () => {
     setModalVisible(false);
   };
+
+  const [fontsLoaded] = useFonts({
+    Ubuntu_400Regular,
+    Ubuntu_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <ThemeProvider>
@@ -106,11 +116,35 @@ const App: React.FC = () => {
           animationType="slide"
           onRequestClose={handleCloseFilterOptions}
         >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text>Filtros</Text>
+          <View style={[styles.modalContainer, { backgroundColor: isDarkTheme ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.5)' }]}>
+            <View style={[styles.modalContent, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
+              <Text style={[styles.modalTitle, { color: isDarkTheme ? '#ddd' : '#000' }]}>Filtros</Text>
+              <TouchableOpacity style={styles.filterOption}>
+                <Ionicons name="mail-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Inbox</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.filterOption}>
+                <Ionicons name="paper-plane-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Sent</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.filterOption}>
+                <Ionicons name="trash-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Deleted</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.filterOption}>
+                <Ionicons name="document-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Drafts</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.filterOption}>
+                <Ionicons name="archive-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Archive</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.filterOption}>
+                <Ionicons name="alert-circle-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Spam</Text>
+              </TouchableOpacity>
               <TouchableOpacity onPress={handleCloseFilterOptions}>
-                <Text style={styles.closeButton}>Fechar</Text>
+                <Text style={[styles.closeButton, { color: isDarkTheme ? '#ddd' : '#000' }]}>Fechar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -125,19 +159,37 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     width: '80%',
-    backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
   },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: 'Ubuntu_700Bold',
+    marginBottom: 10,
+  },
+  filterOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  filterText: {
+    fontSize: 16,
+    fontFamily: 'Ubuntu_400Regular',
+    marginLeft: 10,
+  },
   closeButton: {
     marginTop: 20,
-    color: 'blue',
+    fontSize: 16,
     textAlign: 'center',
   },
 });
 
-export default App;
+export default () => (
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
+
