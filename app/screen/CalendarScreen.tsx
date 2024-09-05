@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { useTheme } from '../context/ThemeContext'; 
+import { useTheme } from '../context/ThemeContext';
 
 const CalendarScreen: React.FC = () => {
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState<string>('');
   const { isDarkTheme } = useTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#FFFFFF' }]}>
-      <Text style={[styles.header, { color: isDarkTheme ? '#FFFFFF' : '#000' }]}>
+      <Text style={[styles.header, { color: isDarkTheme ? '#FFFFFF' : '#000000' }]}>
         Calendário
       </Text>
       <Calendar
@@ -21,14 +21,21 @@ const CalendarScreen: React.FC = () => {
           selectedDayBackgroundColor: '#5218fa',
           selectedDayTextColor: '#FFFFFF',
           todayTextColor: '#5218fa',
-          dayTextColor: isDarkTheme ? '#ddd' : '#2d4150', 
-          arrowColor: 'purple',
+          dayTextColor: isDarkTheme ? '#ddd' : '#2d4150',
+          arrowColor: '#5218fa',
+          monthTextColor: isDarkTheme ? '#ddd' : '#2d4150',
+          indicatorColor: '#5218fa',
         }}
         onDayPress={(day) => {
           setSelected(day.dateString);
         }}
         markedDates={{
-          [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'purple'}
+          [selected]: {
+            selected: true,
+            disableTouchEvent: true,
+            selectedDotColor: '#5218fa',
+            selectedColor: '#5218fa',
+          }
         }}
       />
     </View>
@@ -40,19 +47,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 10,
   },
-  calendar:{
-    borderWidth:  1,
-    borderColor: 'purple',
-    marginHorizontal: 6,
+  calendar: {
+    borderWidth: 1,
+    borderColor: '#5218fa',
     borderRadius: 10,
+    width: '100%',
   },
-  header:{
+  header: {
     fontSize: 18,
     fontFamily: 'Ubuntu_700Bold',
     textAlign: 'center',
-    paddingTop: 60,
-    marginBottom: 12,
+    paddingVertical: 20,
   }
 });
 

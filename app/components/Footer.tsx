@@ -3,7 +3,7 @@ import { View, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useTheme } from '../context/ThemeContext'; // Supondo que você tenha um ThemeContext
+import { useTheme } from '../context/ThemeContext';
 
 type RootStackParamList = {
   Inbox: undefined;
@@ -18,11 +18,17 @@ const Footer: React.FC = () => {
   const [activeIcon, setActiveIcon] = useState<string | null>(null);
   const { isDarkTheme } = useTheme();
 
+  const handleSearchToggle = () => {
+    setSearchVisible(prev => !prev);
+    setActiveIcon(searchVisible ? null : 'search');
+  };
+
   return (
     <View style={[
       styles.container, 
-      { backgroundColor: isDarkTheme ? '#000' : '#f8f8f8', 
-        borderTopColor: isDarkTheme ? '#333' : '#ccc' 
+      { 
+        backgroundColor: isDarkTheme ? '#000' : '#f8f8f8',
+        borderTopColor: isDarkTheme ? '#333' : '#ccc',
       }
     ]}>
       <TouchableOpacity
@@ -41,12 +47,12 @@ const Footer: React.FC = () => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => setSearchVisible(!searchVisible)}
+        onPress={handleSearchToggle}
       >
         <Ionicons
           name="search"
           size={30}
-          color={searchVisible ? '#5138EE' : isDarkTheme ? '#ddd' : '#777777'}
+          color={activeIcon === 'search' ? '#5138EE' : isDarkTheme ? '#ddd' : '#777777'}
         />
       </TouchableOpacity>
 
@@ -69,9 +75,9 @@ const Footer: React.FC = () => {
           style={[
             styles.searchInput, 
             { 
-              backgroundColor: isDarkTheme ? '#333' : '#fff', 
+              backgroundColor: isDarkTheme ? '#333' : '#fff',
               color: isDarkTheme ? '#fff' : '#000',
-              borderColor: isDarkTheme ? '#555' : '#ccc' 
+              borderColor: isDarkTheme ? '#555' : '#ccc',
             }
           ]}
           placeholder="Buscar..."

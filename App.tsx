@@ -15,24 +15,29 @@ import EmailDeletedScreen from './app/screen/EmailDeletedScreen';
 import DraftScreen from './app/screen/DraftScreen';
 import ArchiveScreen from './app/screen/ArchiveScreen';
 import SpamScreen from './app/screen/SpamScreen';
+import CalendarScreen from './app/screen/CalendarScreen';
 import { ThemeProvider, useTheme } from './app/context/ThemeContext';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const Header: React.FC<{ onOpenFilterOptions: () => void; title: string }> = ({ onOpenFilterOptions, title }) => {
-  const navigation = useNavigation();
-  const { isDarkTheme } = useTheme();
+const Header: React.FC<{ onOpenDrawer: () => void; onOpenFilterOptions: () => void; title: string }> = ({ onOpenDrawer, onOpenFilterOptions, title }) => {
+  const { toggleTheme, isDarkTheme } = useTheme();
 
   return (
-    <View style={[styles.header, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
-      <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-        <Ionicons name="menu" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+    <View style={[styles.header, { backgroundColor: isDarkTheme ? '#222' : '#fff' }]}>
+      <TouchableOpacity onPress={onOpenDrawer} style={styles.iconButton}>
+        <Ionicons name="menu-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
       </TouchableOpacity>
       <Text style={[styles.title, { color: isDarkTheme ? '#ddd' : '#000' }]}>{title}</Text>
-      <TouchableOpacity onPress={onOpenFilterOptions}>
-        <Ionicons name="filter-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-      </TouchableOpacity>
+      <View style={styles.iconsContainer}>
+        <TouchableOpacity onPress={onOpenFilterOptions} style={styles.iconButton}>
+          <Ionicons name="funnel-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={toggleTheme} style={styles.iconButton}>
+          <Ionicons name={isDarkTheme ? 'sunny-outline' : 'moon-outline'} size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -47,8 +52,9 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
       screenOptions={({ route }) => ({
         header: () => (
           <Header
+            onOpenDrawer={() => navigation.dispatch(DrawerActions.openDrawer())}
             onOpenFilterOptions={onOpenFilterOptions}
-            title={route.name} // Passa o nome da rota como título
+            title={route.name}
           />
         ),
         drawerStyle: {
@@ -129,6 +135,7 @@ const App: React.FC = () => {
           <Stack.Screen name="Home">
             {() => <DrawerNavigator onOpenFilterOptions={handleOpenFilterOptions} />}
           </Stack.Screen>
+          <Stack.Screen name="Calendar" component={CalendarScreen} />
         </Stack.Navigator>
 
         {/* Modal para exibir os filtros */}
@@ -186,14 +193,22 @@ const App: React.FC = () => {
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
     justifyContent: 'space-between',
-     fontFamily: 'Ubuntu_400Regular',
+    alignItems: 'center',
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
   title: {
     fontSize: 20,
-    fontFamily: 'Ubuntu_700Bold',
+    fontWeight: 'bold',
+  },
+  iconsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconButton: {
+    marginLeft: 10,
   },
   modalContainer: {
     flex: 1,
@@ -202,28 +217,28 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '80%',
-    padding: 20,
     borderRadius: 10,
+    padding: 20,
   },
   modalTitle: {
     fontSize: 18,
-    fontFamily: 'Ubuntu_700Bold',
-    marginBottom: 10,
+    fontWeight: 'bold',
+    marginBottom: 15,
   },
   filterOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 10,
+    paddingVertical: 10,
   },
   filterText: {
     fontSize: 16,
-    fontFamily: 'Ubuntu_400Regular',
     marginLeft: 10,
   },
   closeButton: {
     marginTop: 20,
     fontSize: 16,
     textAlign: 'center',
+    fontWeight: 'bold',
   },
 });
 
@@ -232,4 +247,3 @@ export default () => (
     <App />
   </ThemeProvider>
 );
-

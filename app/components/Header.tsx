@@ -6,7 +6,7 @@ import { useTheme } from '../context/ThemeContext';
 interface HeaderProps {
   onOpenDrawer: () => void;
   onOpenFilterOptions: () => void;
-  title: string; // Adiciona a prop title
+  title: string;
 }
 
 const Header: React.FC<HeaderProps> = ({ onOpenDrawer, onOpenFilterOptions, title }) => {
@@ -52,4 +52,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Header; 
+export default Header;
