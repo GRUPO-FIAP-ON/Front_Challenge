@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation, DrawerActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
@@ -15,22 +15,38 @@ import EmailDeletedScreen from './app/screen/EmailDeletedScreen';
 import DraftScreen from './app/screen/DraftScreen';
 import ArchiveScreen from './app/screen/ArchiveScreen';
 import SpamScreen from './app/screen/SpamScreen';
-import Header from './app/components/Header';
 import { ThemeProvider, useTheme } from './app/context/ThemeContext';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
+const Header: React.FC<{ onOpenFilterOptions: () => void; title: string }> = ({ onOpenFilterOptions, title }) => {
+  const navigation = useNavigation();
+  const { isDarkTheme } = useTheme();
+
+  return (
+    <View style={[styles.header, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
+      <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+        <Ionicons name="menu" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+      </TouchableOpacity>
+      <Text style={[styles.title, { color: isDarkTheme ? '#ddd' : '#000' }]}>{title}</Text>
+      <TouchableOpacity onPress={onOpenFilterOptions}>
+        <Ionicons name="filter-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpenFilterOptions }) => {
   const { isDarkTheme } = useTheme();
-  
+  const navigation = useNavigation();
+
   return (
     <Drawer.Navigator
-      initialRouteName="Inbox"
+      initialRouteName="Caixa de Entrada"
       screenOptions={({ route }) => ({
         header: () => (
           <Header
-            onOpenDrawer={() => {}}
             onOpenFilterOptions={onOpenFilterOptions}
             title={route.name} // Passa o nome da rota como título
           />
@@ -168,6 +184,17 @@ const App: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    justifyContent: 'space-between',
+     fontFamily: 'Ubuntu_400Regular',
+  },
+  title: {
+    fontSize: 20,
+    fontFamily: 'Ubuntu_700Bold',
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -205,3 +232,4 @@ export default () => (
     <App />
   </ThemeProvider>
 );
+
