@@ -3,6 +3,7 @@ import { View, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useTheme } from '../context/ThemeContext'; // Supondo que você tenha um ThemeContext
 
 type RootStackParamList = {
   Inbox: undefined;
@@ -15,9 +16,15 @@ const Footer: React.FC = () => {
   const navigation = useNavigation<FooterNavigationProp>();
   const [searchVisible, setSearchVisible] = useState(false);
   const [activeIcon, setActiveIcon] = useState<string | null>(null);
+  const { isDarkTheme } = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View style={[
+      styles.container, 
+      { backgroundColor: isDarkTheme ? '#000' : '#f8f8f8', 
+        borderTopColor: isDarkTheme ? '#333' : '#ccc' 
+      }
+    ]}>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
@@ -28,7 +35,7 @@ const Footer: React.FC = () => {
         <Ionicons
           name="mail"
           size={30}
-          color={activeIcon === 'mail' ? '#5138EE' : '#777777'}
+          color={activeIcon === 'mail' ? '#5138EE' : isDarkTheme ? '#ddd' : '#777777'}
         />
       </TouchableOpacity>
 
@@ -39,7 +46,7 @@ const Footer: React.FC = () => {
         <Ionicons
           name="search"
           size={30}
-          color={searchVisible ? '#5138EE' : '#777777'}
+          color={searchVisible ? '#5138EE' : isDarkTheme ? '#ddd' : '#777777'}
         />
       </TouchableOpacity>
 
@@ -53,14 +60,22 @@ const Footer: React.FC = () => {
         <Ionicons
           name="calendar"
           size={30}
-          color={activeIcon === 'calendar' ? '#5138EE' : '#777777'}
+          color={activeIcon === 'calendar' ? '#5138EE' : isDarkTheme ? '#ddd' : '#777777'}
         />
       </TouchableOpacity>
 
       {searchVisible && (
         <TextInput
-          style={styles.searchInput}
+          style={[
+            styles.searchInput, 
+            { 
+              backgroundColor: isDarkTheme ? '#333' : '#fff', 
+              color: isDarkTheme ? '#fff' : '#000',
+              borderColor: isDarkTheme ? '#555' : '#ccc' 
+            }
+          ]}
           placeholder="Buscar..."
+          placeholderTextColor={isDarkTheme ? '#aaa' : '#888'}
           autoFocus={true}
         />
       )}
@@ -73,9 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
-    backgroundColor: '#f8f8f8',
     borderTopWidth: 1,
-    borderTopColor: '#ccc',
   },
   button: {
     alignItems: 'center',
@@ -85,11 +98,9 @@ const styles = StyleSheet.create({
     bottom: 60,
     left: 10,
     right: 10,
-    borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
     padding: 10,
-    backgroundColor: '#fff',
     zIndex: 10,
   },
 });

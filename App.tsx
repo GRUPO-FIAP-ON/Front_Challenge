@@ -65,7 +65,7 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
           color: isDarkTheme ? '#FFFFFF' : '#000',
         },
         drawerStyle: {
-          backgroundColor: isDarkTheme ? '#333' : '#fff',
+          backgroundColor: isDarkTheme ? '#000000' : '#000000',
         },
         drawerLabelStyle: {
           fontFamily: 'Ubuntu_700Bold',
@@ -164,7 +164,7 @@ const App: React.FC = () => {
                   activeOpacity={1}
                   onPressOut={() => setModalVisible(false)}
                 >
-                  <View style={[styles.modalContentTop, { backgroundColor: isDarkTheme ? '#444' : '#FFFFFF' }]}>
+                  <View style={[styles.modalContentTop, { backgroundColor: isDarkTheme ? '#222' : '#FFFFFF' }]}>
                     {[
                       { type: 'all', label: 'Todas', icon: 'mail-outline' },
                       { type: 'unread', label: 'Não Lidas', icon: 'mail-unread-outline' },
@@ -174,7 +174,7 @@ const App: React.FC = () => {
                     ].map((filterOption) => (
                       <TouchableOpacity
                         key={filterOption.type}
-                        style={[styles.filterOption, { backgroundColor: isDarkTheme ? '#555' : '#fff' }]}
+                        style={[styles.filterOption, { backgroundColor: isDarkTheme ? '#333' : '#FFFFFF' }]}
                         onPress={() => handleFilterChange(filterOption.type as typeof filter)}
                       >
                         <Icon name={filterOption.icon} size={20} color={isDarkTheme ? '#ddd' : '#000'} />
