@@ -32,7 +32,7 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
           <Icon
             name="menu"
             size={25}
-            color={isDarkTheme ? '#fff' : '#000'}
+            color={isDarkTheme ? '#FFFFFF' : '#000'}
             style={{ marginLeft: 15 }}
             onPress={() => navigation.toggleDrawer()}
           />
@@ -62,14 +62,14 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
         headerTitleStyle: {
           fontFamily: 'Ubuntu_700Bold',
           fontSize: 18,
-          color: isDarkTheme ? '#fff' : '#000',
+          color: isDarkTheme ? '#FFFFFF' : '#000',
         },
         drawerLabelStyle: {
           fontFamily: 'Ubuntu_700Bold', 
           fontSize: 16,
-          color: isDarkTheme ? '#fff' : '#000',
+          color: isDarkTheme ? '#FFFFFF' : '#000',
         },
-        drawerActiveTintColor: isDarkTheme ? '#fff' : '#000',
+        drawerActiveTintColor: isDarkTheme ? '#FFFFFF' : '#000',
         drawerInactiveTintColor: isDarkTheme ? '#ddd' : '#383838',
       })}
     >
@@ -135,7 +135,7 @@ const App: React.FC = () => {
                   activeOpacity={1}
                   onPressOut={() => setModalVisible(false)}
                 >
-                  <View style={[styles.modalContentTop, { backgroundColor: isDarkTheme ? '#444' : '#fff' }]}>
+                  <View style={[styles.modalContentTop, { backgroundColor: isDarkTheme ? '#444' : '#FFFFFF' }]}>
                     {[
                       { type: 'all', label: 'Todas', icon: 'mail-outline' },
                       { type: 'unread', label: 'Não Lidas', icon: 'mail-unread-outline' },

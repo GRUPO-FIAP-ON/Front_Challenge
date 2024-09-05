@@ -56,7 +56,7 @@ const InboxScreen: React.FC = () => {
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <>
-            <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#fff' : '#000' }]}>Esta Semana</Text>
+            <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#FFFFFF' : '#000' }]}>Esta Semana</Text>
           </>
         }
       />
@@ -66,7 +66,7 @@ const InboxScreen: React.FC = () => {
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <>
-            <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#fff' : '#000' }]}>Semana Passada</Text>
+            <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#FFFFFF' : '#000' }]}>Semana Passada</Text>
           </>
         }
       />
@@ -76,7 +76,7 @@ const InboxScreen: React.FC = () => {
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <>
-            <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#fff' : '#000' }]}>Este Mês</Text>
+            <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#FFFFFF' : '#000' }]}>Este Mês</Text>
           </>
         }
       />
@@ -84,7 +84,7 @@ const InboxScreen: React.FC = () => {
         style={[styles.floatingButton, { backgroundColor: isDarkTheme ? '#5138EE' : '#5138EE' }]}
         onPress={() => setNewEmailVisible(true)}
       >
-        <Ionicons name="add" size={30} color="#fff" />
+        <Ionicons name="add" size={30} color="#FFFFFF" />
       </TouchableOpacity>
 
       {newEmailVisible && (

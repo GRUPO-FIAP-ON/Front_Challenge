@@ -15,14 +15,14 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
+    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#FFFFFF' }]}>
       <View style={styles.header}>
         <Image
           //source={require('/assets/images/logo.jpeg')}
           style={styles.logo}
         />
       </View>
-      <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#000' }]}>Acessar Conta</Text>
+      <Text style={[styles.title, { color: isDarkTheme ? '#FFFFFF' : '#000' }]}>Acessar Conta</Text>
 
       <Input 
         label="E-mail"
@@ -44,7 +44,7 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
       <View style={styles.forgotPasswordContainer}>
         <TouchableOpacity onPress={() => console.log("Redefinir senha")}>
-          <Text style={[styles.forgotPasswordLink, { color: isDarkTheme ? '#bbb' : '#8172E8' }]}>
+          <Text style={[styles.forgotPasswordLink, { color: isDarkTheme ? '#FFFFFF' : '#8172E8' }]}>
             Esqueceu a sua senha?
           </Text>
         </TouchableOpacity>
@@ -54,7 +54,7 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
       <View style={styles.registerContainer}>
         <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
-          <Text style={[styles.registerLink, { color: isDarkTheme ? '#bbb' : '#8172E8' }]}>
+          <Text style={[styles.registerLink, { color: isDarkTheme ? '#FFFFFF' : '#8172E8' }]}>
             Cadastre-se
           </Text>
         </TouchableOpacity>

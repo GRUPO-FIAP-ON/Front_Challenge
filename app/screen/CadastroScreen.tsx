@@ -18,8 +18,8 @@ const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
-      <Text style={[styles.title, { color: isDarkTheme ? '#fff' : '#000' }]}>Cadastre-se</Text>
+    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#FFFFFF' }]}>
+      <Text style={[styles.title, { color: isDarkTheme ? '#FFFFFF' : '#000' }]}>Cadastre-se</Text>
 
       <Input 
         label="Nome Completo"

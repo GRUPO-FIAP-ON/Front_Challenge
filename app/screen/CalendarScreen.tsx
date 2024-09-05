@@ -1,5 +1,3 @@
-// src/screen/CalendarScreen.tsx
-
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
@@ -10,18 +8,18 @@ const CalendarScreen: React.FC = () => {
   const { isDarkTheme } = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
-      <Text style={[styles.header, { color: isDarkTheme ? '#fff' : '#000' }]}>
+    <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#FFFFFF' }]}>
+      <Text style={[styles.header, { color: isDarkTheme ? '#FFFFFF' : '#000' }]}>
         Calendário
       </Text>
       <Calendar
         style={styles.calendar}
         theme={{
-          backgroundColor: isDarkTheme ? '#333' : '#fff',
-          calendarBackground: isDarkTheme ? '#444' : '#fff',
+          backgroundColor: isDarkTheme ? '#333' : '#FFFFFF',
+          calendarBackground: isDarkTheme ? '#444' : '#FFFFFF',
           textSectionTitleColor: isDarkTheme ? '#ddd' : '#b6c1cd',
           selectedDayBackgroundColor: '#5218fa',
-          selectedDayTextColor: '#ffffff',
+          selectedDayTextColor: '#FFFFFF',
           todayTextColor: '#5218fa',
           dayTextColor: isDarkTheme ? '#ddd' : '#2d4150', 
           arrowColor: 'purple',
