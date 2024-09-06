@@ -21,7 +21,7 @@ import { ThemeProvider, useTheme } from './app/context/ThemeContext';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const Header: React.FC<{ onOpenDrawer: () => void; onOpenFilterOptions: () => void; title: string }> = ({ onOpenDrawer, onOpenFilterOptions, title }) => {
+const Header = ({ onOpenDrawer, onOpenFilterOptions, title }) => {
   const { toggleTheme, isDarkTheme } = useTheme();
 
   return (
@@ -42,7 +42,7 @@ const Header: React.FC<{ onOpenDrawer: () => void; onOpenFilterOptions: () => vo
   );
 };
 
-const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpenFilterOptions }) => {
+const DrawerNavigator = ({ onOpenFilterOptions }) => {
   const { isDarkTheme } = useTheme();
   const navigation = useNavigation();
 
@@ -57,18 +57,11 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
             title={route.name}
           />
         ),
-        drawerStyle: {
-          backgroundColor: isDarkTheme ? '#222' : '#fff',
-        },
-        drawerLabelStyle: {
-          fontFamily: 'Ubuntu_700Bold',
-          fontSize: 16,
-        },
+        drawerStyle: { backgroundColor: isDarkTheme ? '#222' : '#fff' },
+        drawerLabelStyle: { fontFamily: 'Ubuntu_700Bold', fontSize: 16 },
         drawerActiveTintColor: '#FFFFFF',
         drawerInactiveTintColor: '#ddd',
-        drawerItemStyle: {
-          marginVertical: 5,
-        },
+        drawerItemStyle: { marginVertical: 5 },
       })}
     >
       <Drawer.Screen
@@ -105,88 +98,54 @@ const DrawerNavigator: React.FC<{ onOpenFilterOptions: () => void }> = ({ onOpen
   );
 };
 
-const App: React.FC = () => {
+const App = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const { isDarkTheme } = useTheme();
 
-  const handleOpenFilterOptions = () => {
-    setModalVisible(true);
-  };
-
-  const handleCloseFilterOptions = () => {
-    setModalVisible(false);
-  };
+  const handleOpenFilterOptions = () => setModalVisible(true);
+  const handleCloseFilterOptions = () => setModalVisible(false);
 
   const [fontsLoaded] = useFonts({
     Ubuntu_400Regular,
     Ubuntu_700Bold,
   });
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  if (!fontsLoaded) return null;
 
   return (
-    <ThemeProvider>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Cadastro" component={CadastroScreen} />
-          <Stack.Screen name="Home">
-            {() => <DrawerNavigator onOpenFilterOptions={handleOpenFilterOptions} />}
-          </Stack.Screen>
-          <Stack.Screen name="Calendar" component={CalendarScreen} />
-        </Stack.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Cadastro" component={CadastroScreen} />
+        <Stack.Screen name="Home">
+          {() => <DrawerNavigator onOpenFilterOptions={handleOpenFilterOptions} />}
+        </Stack.Screen>
+        <Stack.Screen name="Calendar" component={CalendarScreen} />
+      </Stack.Navigator>
 
-        {/* Modal para exibir os filtros */}
-        <Modal
-          visible={modalVisible}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={handleCloseFilterOptions}
-        >
-          <View style={[styles.modalContainer, { backgroundColor: isDarkTheme ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.5)' }]}>
-            <View style={[styles.modalContent, { backgroundColor: isDarkTheme ? '#333' : '#fff' }]}>
-              <Text style={[styles.modalTitle, { color: isDarkTheme ? '#ddd' : '#000' }]}>Filtros</Text>
-
-              {/* Filtro: Todas */}
-              <TouchableOpacity style={styles.filterOption}>
-                <Ionicons name="mail-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Todas</Text>
+      <Modal visible={modalVisible} transparent animationType="slide" onRequestClose={handleCloseFilterOptions}>
+        <View style={[styles.modalContainer, { backgroundColor: isDarkTheme ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.5)' }]}>
+          <View style={[styles.modalContent, { backgroundColor: isDarkTheme ? '#222' : '#fff' }]}>
+            <Text style={[styles.modalTitle, { color: isDarkTheme ? '#fff' : '#000' }]}>Filtros</Text>
+            {[
+              { name: 'mail-outline', label: 'Todas' },
+              { name: 'eye-off-outline', label: 'Não lidas' },
+              { name: 'flag-outline', label: 'Sinalizados' },
+              { name: 'bookmark-outline', label: 'Fixos' },
+              { name: 'attach-outline', label: 'Com Anexos' },
+            ].map((filter, index) => (
+              <TouchableOpacity key={index} style={styles.filterOption}>
+                <Ionicons name={filter.name} size={24} color={isDarkTheme ? '#fff' : '#000'} />
+                <Text style={[styles.filterText, { color: isDarkTheme ? '#fff' : '#000' }]}>{filter.label}</Text>
               </TouchableOpacity>
-
-              {/* Filtro: Não lidas */}
-              <TouchableOpacity style={styles.filterOption}>
-                <Ionicons name="eye-off-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Não lidas</Text>
-              </TouchableOpacity>
-
-              {/* Filtro: Sinalizados */}
-              <TouchableOpacity style={styles.filterOption}>
-                <Ionicons name="flag-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Sinalizados</Text>
-              </TouchableOpacity>
-
-              {/* Filtro: Fixos */}
-              <TouchableOpacity style={styles.filterOption}>
-                <Ionicons name="bookmark-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Fixos</Text>
-              </TouchableOpacity>
-
-              {/* Filtro: Com Anexos */}
-              <TouchableOpacity style={styles.filterOption}>
-                <Ionicons name="attach-outline" size={24} color={isDarkTheme ? '#ddd' : '#000'} />
-                <Text style={[styles.filterText, { color: isDarkTheme ? '#ddd' : '#000' }]}>Com Anexos</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={handleCloseFilterOptions}>
-                <Text style={[styles.closeButton, { color: isDarkTheme ? '#ddd' : '#000' }]}>Fechar</Text>
-              </TouchableOpacity>
-            </View>
+            ))}
+            <TouchableOpacity onPress={handleCloseFilterOptions}>
+              <Text style={[styles.closeButton, { color: isDarkTheme ? '#fff' : '#000' }]}>Fechar</Text>
+            </TouchableOpacity>
           </View>
-        </Modal>
-      </NavigationContainer>
-    </ThemeProvider>
+        </View>
+      </Modal>
+    </NavigationContainer>
   );
 };
 

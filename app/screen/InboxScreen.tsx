@@ -45,42 +45,42 @@ const InboxScreen: React.FC = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#f8f8f8' }]}>
-      <FlatList
-        data={emailsEstaSemana}
-        renderItem={renderEmailItem}
-        keyExtractor={(item) => item.id}
-        ListHeaderComponent={
-          <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#FFFFFF' : '#000', backgroundColor: isDarkTheme ? '#444' : '#f0f0f0' }]}>
-            Esta Semana
-          </Text>
-        }
-      />
-      <FlatList
-        data={emailsSemanaPassada}
-        renderItem={renderEmailItem}
-        keyExtractor={(item) => item.id}
-        ListHeaderComponent={
-          <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#FFFFFF' : '#000', backgroundColor: isDarkTheme ? '#444' : '#f0f0f0' }]}>
-            Semana Passada
-          </Text>
-        }
-      />
-      <FlatList
-        data={emailsEsteMes}
-        renderItem={renderEmailItem}
-        keyExtractor={(item) => item.id}
-        ListHeaderComponent={
-          <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#FFFFFF' : '#000', backgroundColor: isDarkTheme ? '#444' : '#f0f0f0' }]}>
-            Este Mês
-          </Text>
-        }
-      />
-      <TouchableOpacity 
-        style={[styles.floatingButton, { backgroundColor: isDarkTheme ? '#5138EE' : '#5138EE' }]}
-        onPress={() => setNewEmailVisible(true)}
-      >
-        <Ionicons name="add" size={30} color="#FFFFFF" />
-      </TouchableOpacity>
+    <FlatList
+      data={emailsEstaSemana}
+      renderItem={renderEmailItem}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={
+        <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#FFFFFF' : '#000', backgroundColor: isDarkTheme ? '#444' : '#f0f0f0' }]}>
+          Esta Semana
+        </Text>
+      }
+    />
+    <FlatList
+      data={emailsSemanaPassada}
+      renderItem={renderEmailItem}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={
+        <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#FFFFFF' : '#000', backgroundColor: isDarkTheme ? '#444' : '#f0f0f0' }]}>
+          Semana Passada
+        </Text>
+      }
+    />
+    <FlatList
+      data={emailsEsteMes}
+      renderItem={renderEmailItem}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={
+        <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#FFFFFF' : '#000', backgroundColor: isDarkTheme ? '#444' : '#f0f0f0' }]}>
+          Este Mês
+        </Text>
+      }
+    />
+    <TouchableOpacity 
+      style={[styles.floatingButton, { backgroundColor: isDarkTheme ? '#5138EE' : '#5138EE' }]}
+      onPress={() => setNewEmailVisible(true)}
+    >
+      <Ionicons name="add" size={30} color="#FFFFFF" />
+    </TouchableOpacity>
 
       {newEmailVisible && (
         <NewEmail onClose={() => setNewEmailVisible(false)} />
