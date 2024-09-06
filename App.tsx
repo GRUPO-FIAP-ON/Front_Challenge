@@ -60,7 +60,6 @@ const DrawerNavigator = ({ onOpenFilterOptions }) => {
         drawerStyle: { backgroundColor: isDarkTheme ? '#222' : '#fff' },
         drawerLabelStyle: { fontFamily: 'Ubuntu_700Bold', fontSize: 16 },
         drawerActiveTintColor: '#FFFFFF',
-        drawerInactiveTintColor: '#ddd',
         drawerItemStyle: { marginVertical: 5 },
       })}
     >
