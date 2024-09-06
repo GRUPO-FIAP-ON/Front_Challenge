@@ -21,7 +21,7 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#FFFFFF' }]}>
       <View style={styles.header}>
         <Image
-          //source={require('/assets/images/logo.jpeg')}
+          source={require('../../assets/logo.png')}
           style={styles.logo}
         />
       </View>
