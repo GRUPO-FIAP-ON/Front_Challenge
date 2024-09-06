@@ -29,8 +29,8 @@ const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       /> 
       
       <Input 
-        label="E-mail"
-        placeholder="Digite seu e-mail"
+        label="Usuário"
+        placeholder="Digite seu usuário"
         onShowPassword={() => {}}
         showPassword={false}
         secureTextEntry={false}
