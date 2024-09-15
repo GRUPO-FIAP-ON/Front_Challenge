@@ -3,16 +3,76 @@ import { View, Text, StyleSheet } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import { useTheme } from '../context/ThemeContext';
+import { showMessage } from 'react-native-flash-message';
 
 const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const { isDarkTheme } = useTheme();
 
-  const handleCadastro = () => {
-    // Adicione aqui a lógica de autenticação
-    navigation.navigate('Inbox');
+  const handleCadastro = async () => {
+    if (password !== confirmPassword) {
+      showMessage({
+        message: "Erro",
+        description: "As senhas devem ser iguais.",
+        type: "danger",
+      });
+      return;
+    }
+
+    if (!password || !fullName || !username) {
+      showMessage({
+        message: "Erro",
+        description: "Todos os campos são obrigatórios.",
+        type: "danger",
+      });
+      return;
+    }
+
+    const userData = {
+      fullName,
+      username,
+      password
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData)
+      });
+
+      const data = await response.json();
+
+      if (response.status === 201) {
+        showMessage({
+          message: "Sucesso",
+          description: "Usuário cadastrado com sucesso!",
+          type: "success",
+        });
+        
+        navigation.navigate('Inbox');
+      } else {
+        showMessage({
+          message: "Erro",
+          description: data.error || "Falha ao cadastrar o usuário.",
+          type: "danger",
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao adicionar usuário:", error);
+      
+      showMessage({
+        message: "Erro",
+        description: "Erro ao comunicar-se com o servidor.",
+        type: "danger",
+      });
+    }
   };
 
   return (
@@ -22,19 +82,13 @@ const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       <Input 
         label="Nome Completo"
         placeholder="Digite seu Nome Completo"
-        onShowPassword={() => {}}
-        showPassword={false}
-        secureTextEntry={false}
-        onChangeText={setEmail}
+        onChangeText={setFullName}
       /> 
       
       <Input 
         label="Usuário"
         placeholder="Digite seu usuário"
-        onShowPassword={() => {}}
-        showPassword={false}
-        secureTextEntry={false}
-        onChangeText={setEmail}
+        onChangeText={setUsername}
       /> 
       
       <Input 
@@ -52,7 +106,7 @@ const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         secureTextEntry
         showPassword={showPassword}
         onShowPassword={() => setShowPassword(!showPassword)}
-        onChangeText={setPassword}
+        onChangeText={setConfirmPassword}
       />
 
       <Button title="Cadastrar" onPress={handleCadastro} />

@@ -3,18 +3,59 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import { useTheme } from '../context/ThemeContext';
+import { showMessage } from 'react-native-flash-message';
 
 const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const { isDarkTheme } = useTheme();
 
-  const handleLogin = () => {
-    // Lógica de autenticação
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Home' }],
-    });
+  const handleLogin = async () => {
+    if (!email || !password) {
+      showMessage({
+        message: "Erro",
+        description: "Todos os campos são obrigatórios.",
+        type: "danger",
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.status === 200) {
+        showMessage({
+          message: "Sucesso",
+          description: "Login realizado com sucesso!",
+          type: "success",
+        });
+
+        navigation.navigate('Inbox');
+      } else {
+        showMessage({
+          message: "Erro",
+          description: data.error || "Falha ao realizar o login.",
+          type: "danger",
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao realizar login:", error);
+      
+      showMessage({
+        message: "Erro",
+        description: "Erro ao comunicar-se com o servidor.",
+        type: "danger",
+      });
+    }
   };
 
   return (
@@ -28,11 +69,8 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       <Text style={[styles.title, { color: isDarkTheme ? '#FFFFFF' : '#000' }]}>Acessar Conta</Text>
 
       <Input 
-        label="E-mail"
-        placeholder="Digite seu e-mail"
-        onShowPassword={() => {}}
-        showPassword={false}
-        secureTextEntry={false}
+        label="Email"
+        placeholder="Digite seu email"
         onChangeText={setEmail}
       /> 
       
@@ -40,8 +78,8 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         label="Senha"
         placeholder="Digite sua senha"
         secureTextEntry
-        showPassword={false}
-        onShowPassword={() => {}}
+        showPassword={showPassword}
+        onShowPassword={() => setShowPassword(!showPassword)}
         onChangeText={setPassword}
       />
 
