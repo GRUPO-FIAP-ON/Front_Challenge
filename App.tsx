@@ -22,7 +22,7 @@ import { ThemeProvider, useTheme } from './app/context/ThemeContext';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const Header = ({ onOpenDrawer, onOpenFilterOptions, title }) => {
+const Header = ({ onOpenDrawer, onOpenFilterOptions, title }: any) => {
   const { toggleTheme, isDarkTheme } = useTheme();
 
   return (
@@ -43,7 +43,7 @@ const Header = ({ onOpenDrawer, onOpenFilterOptions, title }) => {
   );
 };
 
-const DrawerNavigator = ({ onOpenFilterOptions }) => {
+const DrawerNavigator = ({ onOpenFilterOptions }: any) => {
   const { isDarkTheme } = useTheme();
   const navigation = useNavigation();
 

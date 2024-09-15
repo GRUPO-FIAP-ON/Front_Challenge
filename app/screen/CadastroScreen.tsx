@@ -56,7 +56,7 @@ const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
           type: "success",
         });
         
-        navigation.navigate('Inbox');
+        navigation.navigate('Home');
       } else {
         showMessage({
           message: "Erro",

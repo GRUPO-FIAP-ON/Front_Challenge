@@ -26,7 +26,7 @@ const CalendarScreen: React.FC = () => {
           monthTextColor: isDarkTheme ? '#ddd' : '#2d4150',
           indicatorColor: '#5218fa',
         }}
-        onDayPress={(day) => {
+        onDayPress={(day: any) => {
           setSelected(day.dateString);
         }}
         markedDates={{
