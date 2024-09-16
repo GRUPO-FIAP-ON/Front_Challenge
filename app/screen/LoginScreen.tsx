@@ -6,13 +6,13 @@ import { useTheme } from '../context/ThemeContext';
 import { showMessage } from 'react-native-flash-message';
 
 const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const { isDarkTheme } = useTheme();
 
   const handleLogin = async () => {
-    if (!email || !password) {
+    if (!username || !password) {
       showMessage({
         message: "Erro",
         description: "Todos os campos são obrigatórios.",
@@ -27,19 +27,13 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
 
       if (response.status === 200) {
-        showMessage({
-          message: "Sucesso",
-          description: "Login realizado com sucesso!",
-          type: "success",
-        });
-
-        navigation.navigate('Inbox');
+        navigation.navigate('Home');
       } else {
         showMessage({
           message: "Erro",
@@ -69,9 +63,9 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       <Text style={[styles.title, { color: isDarkTheme ? '#FFFFFF' : '#000' }]}>Acessar Conta</Text>
 
       <Input 
-        label="Email"
-        placeholder="Digite seu email"
-        onChangeText={setEmail}
+        label="Usuário"
+        placeholder="Digite seu usuário"
+        onChangeText={setUsername}
       /> 
       
       <Input 
