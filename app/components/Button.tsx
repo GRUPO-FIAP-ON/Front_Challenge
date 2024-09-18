@@ -1,16 +1,23 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
 
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  color?: string; 
+  color?: string;
+  isLoading?: boolean; 
 }
 
-const Button: React.FC<ButtonProps> = ({ title, onPress, color = '#5138EE' }) => {
+const Button: React.FC<ButtonProps> = ({ title, onPress, color = '#5138EE', isLoading = false }) => {
   return (
     <TouchableOpacity style={[styles.button, { backgroundColor: color }]} onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
+      {
+        !isLoading ? (
+          <Text style={styles.text}>{title}</Text>
+        ) : (
+          <ActivityIndicator size="small" color="#fff" />
+        ) 
+      }
     </TouchableOpacity>
   );
 };
@@ -18,10 +25,11 @@ const Button: React.FC<ButtonProps> = ({ title, onPress, color = '#5138EE' }) =>
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#5138EE', 
-    paddingVertical: 10,
+    display: 'flex',
     paddingHorizontal: 20,
     borderRadius: 25,
     alignItems: 'center',
+    justifyContent: 'center',
     height:50,
     marginBottom: 20, 
   },

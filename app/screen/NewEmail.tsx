@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet, Dimensions, Text } from 'react-native';
 import Button from '../components/Button';
 import { useTheme } from '../context/ThemeContext'; // Ajuste o caminho conforme necessário
+import { showMessage } from 'react-native-flash-message';
+import { useSession } from '../context/SessionContext';
 
 const { height } = Dimensions.get('window');
 
@@ -10,15 +12,63 @@ interface NewEmailProps {
 }
 
 const NewEmail: React.FC<NewEmailProps> = ({ onClose }) => {
-  const [to, setTo] = useState('');
+  const [recipient, setRecipient] = useState('');
   const [subject, setSubject] = useState('');
-  const [email, setEmail] = useState('');
-
+  const [body, setBody] = useState('');
+  const [loading, setLoading] = useState(false);
   const { isDarkTheme } = useTheme();
+  const { user } = useSession();
 
-  const handleSend = () => {
-    // Lógica de envio do e-mail
-    console.log("E-mail enviado:", { to, subject, email });
+  const handleSend = async () => {
+    if (!user) return;
+
+    if (!recipient || !subject || !body) {
+      showMessage({
+        message: "Erro",
+        description: "Para enviar um e-mail você precisa preencher todos os campos.",
+        type: "danger",
+      });
+
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(`http://localhost:3000/users/${user.id}/emails`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ recipient, subject, body })
+      });
+
+      const data = await response.json();
+
+      if (response.status === 201) {      
+        showMessage({
+          message: "Sucesso",
+          description: `E-mail enviado com sucesso para ${recipient}`,
+          type: "success",
+        });
+      } else {
+        showMessage({
+          message: "Erro",
+          description: data.error || "Falha ao enviar e-mail.",
+          type: "danger",
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao enviar e-mail:", error);
+      
+      showMessage({
+        message: "Erro",
+        description: "Erro ao comunicar-se com o servidor.",
+        type: "danger",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,10 +81,10 @@ const NewEmail: React.FC<NewEmailProps> = ({ onClose }) => {
       </View>
       <TextInput
         style={[styles.input, { borderBottomColor: isDarkTheme ? '#666' : '#ccc' }]}
-        placeholder="Para"
+        placeholder="Para: username"
         placeholderTextColor={isDarkTheme ? '#bbb' : '#666'}
-        value={to}
-        onChangeText={setTo}
+        value={recipient}
+        onChangeText={setRecipient}
       />
       <TextInput
         style={[styles.input, { borderBottomColor: isDarkTheme ? '#666' : '#ccc' }]}
@@ -47,11 +97,11 @@ const NewEmail: React.FC<NewEmailProps> = ({ onClose }) => {
         style={[styles.EmailInput, { borderColor: isDarkTheme ? '#666' : '#ccc', color: isDarkTheme ? '#fff' : '#000' }]}
         placeholder="Mensagem"
         placeholderTextColor={isDarkTheme ? '#bbb' : '#666'}
-        value={email}
-        onChangeText={setEmail}
+        value={body}
+        onChangeText={setBody}
         multiline
       />
-      <Button title="Enviar" onPress={handleSend} />
+      <Button title="Enviar" onPress={handleSend} isLoading={loading} />
     </View>
   );
 };
