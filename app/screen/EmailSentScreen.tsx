@@ -36,7 +36,7 @@ const EmailSentScreen: React.FC = () => {
           throw new Error('Erro ao buscar e-mails');
         }
         const data = await response.json();
-        setEmails(data.sentEmails);
+        setEmails(data?.sentEmails);
       } catch (error) {
         console.error("Erro ao buscar e-mails: ", error);
       } finally {

@@ -35,7 +35,7 @@ const InboxScreen: React.FC = () => {
           throw new Error('Erro ao buscar e-mails');
         }
         const data = await response.json();
-        setEmails(data.receivedEmails);
+        setEmails(data?.receivedEmails);
       } catch (error) {
         console.error("Erro ao buscar e-mails: ", error);
       } finally {
