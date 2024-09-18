@@ -14,6 +14,15 @@ interface EmailItemProps {
 const EmailItem: React.FC<EmailItemProps> = ({ sender, subject, preview, date, flagged }) => {
   const { isDarkTheme } = useTheme(); // Pega o estado do tema
 
+  function generatePreview(body: string, maxLength: number = 75): string {
+    if (body.length > maxLength) {
+      return `${body.substring(0, maxLength)}...`;
+    }
+
+    return body;
+  }
+
+
   return (
     <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#FFFFFF' }]}>
       <View style={styles.header}>
@@ -21,7 +30,7 @@ const EmailItem: React.FC<EmailItemProps> = ({ sender, subject, preview, date, f
         <Text style={[styles.date, { color: isDarkTheme ? '#FFFFFF' : '#999999' }]}>{date}</Text>
       </View>
       <Text style={[styles.subject, { color: isDarkTheme ? '#FFFFFF' : '#555555' }]}>{subject}</Text>
-      <Text style={[styles.preview, { color: isDarkTheme ? '#FFFFFF' : '#555555' }]}>{preview}</Text>
+      <Text style={[styles.preview, { color: isDarkTheme ? '#FFFFFF' : '#555555' }]}>{generatePreview(preview)}</Text>
       {flagged && <Ionicons name="flag" size={20} color="red" style={styles.flagIcon} />}
     </View>
   );
