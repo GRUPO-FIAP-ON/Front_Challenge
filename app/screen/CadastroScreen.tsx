@@ -32,11 +32,7 @@ const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       return;
     }
 
-    const userData = {
-      fullName,
-      username,
-      password
-    };
+    const userData = { fullName, username, password };
 
     try {
       const response = await fetch('http://localhost:3000/users', {
@@ -49,14 +45,14 @@ const CadastroScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
       const data = await response.json();
 
-      if (response.status === 201) {
+      if (response.status === 201) {      
         showMessage({
           message: "Sucesso",
-          description: "Usuário cadastrado com sucesso!",
+          description: "Usuário cadastrado com sucesso, faça o login para continuar.",
           type: "success",
         });
-        
-        navigation.navigate('Home');
+  
+        navigation.navigate('Login');
       } else {
         showMessage({
           message: "Erro",
