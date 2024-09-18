@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: height * 0.7, // 70% da altura da tela
+    height: height * 0.7,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20,

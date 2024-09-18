@@ -46,10 +46,6 @@ const InboxScreen: React.FC = () => {
     fetchEmails();
   }, [user, userLoading]);
 
-  if (loading || userLoading) {
-    return <ActivityIndicator size="large" color="#5138EE" />;
-  }
-
   const renderEmailItem = ({ item }: any) => (
     <EmailItem
       sender={item.sender.fullName}
@@ -62,28 +58,43 @@ const InboxScreen: React.FC = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#f8f8f8' }]}>
-      <FlatList
-        data={emails}
-        renderItem={renderEmailItem}
-        keyExtractor={(item) => item.id}
-        ListHeaderComponent={
-          <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#FFFFFF' : '#000', backgroundColor: isDarkTheme ? '#444' : '#f0f0f0' }]}>
-            E-mails
-          </Text>
-        }
-      />
-      <TouchableOpacity 
-        style={[styles.floatingButton, { backgroundColor: isDarkTheme ? '#5138EE' : '#5138EE' }]}
-        onPress={() => setNewEmailVisible(true)}
-      >
-        <Ionicons name="add" size={30} color="#FFFFFF" />
-      </TouchableOpacity>
+      {
+        loading || userLoading ? (
+          <View style={[{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%'
+          }]}>
+            <ActivityIndicator size="large" color="#5138EE" />
+          </View>
+        ) : (
+          <>
+            <FlatList
+              data={emails}
+              renderItem={renderEmailItem}
+              keyExtractor={(item) => item.id}
+              ListHeaderComponent={
+                <Text style={[styles.sectionHeader, { color: isDarkTheme ? '#FFFFFF' : '#000', backgroundColor: isDarkTheme ? '#444' : '#f0f0f0' }]}>
+                  E-mails
+                </Text>
+              }
+            />
+            <TouchableOpacity 
+              style={[styles.floatingButton, { backgroundColor: isDarkTheme ? '#5138EE' : '#5138EE' }]}
+              onPress={() => setNewEmailVisible(true)}
+            >
+              <Ionicons name="add" size={30} color="#FFFFFF" />
+            </TouchableOpacity>
 
-      {newEmailVisible && (
-        <NewEmail onClose={() => setNewEmailVisible(false)} />
-      )}
+            {newEmailVisible && (
+              <NewEmail onClose={() => setNewEmailVisible(false)} />
+            )}
 
-      <Footer />
+            <Footer />
+          </>
+        )
+      }
     </View>
   );
 };
