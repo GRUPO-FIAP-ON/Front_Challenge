@@ -5,12 +5,14 @@ import Input from '../components/Input';
 import { useTheme } from '../context/ThemeContext';
 import { showMessage } from 'react-native-flash-message';
 import { saveSessionData } from '../services/sessionStorage';
+import { useSession } from '../context/SessionContext';
 
 const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const { isDarkTheme } = useTheme();
+  const { setUser } = useSession();
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -35,7 +37,8 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
       if (response.status === 200) {
         await saveSessionData('authData', JSON.stringify(data));
-
+        setUser(data);
+        
         navigation.navigate('Home');
       } else {
         showMessage({

@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { getSessionData } from '../services/sessionStorage';
-import { ActivityIndicator } from 'react-native';
 
 type UserProps = { 
     id: string;
@@ -13,6 +12,7 @@ type UserProps = {
 interface SessionContextProps {
   user: UserProps | null;
   setUser: React.Dispatch<React.SetStateAction<UserProps | null>>;
+  loading: boolean;
 }
 
 const SessionContext = createContext<SessionContextProps | undefined>(undefined);
@@ -20,7 +20,6 @@ const SessionContext = createContext<SessionContextProps | undefined>(undefined)
 export const SessionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<UserProps | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -28,9 +27,12 @@ export const SessionProvider: React.FC<{ children: ReactNode }> = ({ children })
                 const authData = await getSessionData('authData');
                 if (authData) {
                     setUser(JSON.parse(authData));
+                } else {
+                    setUser(null);
                 }
             } catch (e) {
-                setError('Failed to load user data.');
+                console.error('Failed to load user data:', e);
+                setUser(null);
             } finally {
                 setLoading(false);
             }
@@ -39,16 +41,8 @@ export const SessionProvider: React.FC<{ children: ReactNode }> = ({ children })
         fetchUserData();
     }, []);
 
-    if (loading) {
-        return <ActivityIndicator size="large" color="#5138EE" />;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
-
     return (
-        <SessionContext.Provider value={{ user, setUser }}>
+        <SessionContext.Provider value={{ user, setUser, loading }}>
             {children}
         </SessionContext.Provider>
     );

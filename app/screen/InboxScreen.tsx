@@ -18,16 +18,18 @@ type InboxScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Inbox'
 
 const InboxScreen: React.FC = () => {
   const navigation = useNavigation<InboxScreenNavigationProp>();
-  const { user } = useSession();
   const [emails, setEmails] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [newEmailVisible, setNewEmailVisible] = useState(false);
   const { isDarkTheme } = useTheme(); 
+  const { user, loading: userLoading } = useSession();
 
   useEffect(() => {
     const fetchEmails = async () => {
+      if (!user || userLoading) return;
+
       try {
-        const response = await fetch(`http://localhost:3000/users/${user?.id}/emails`);
+        const response = await fetch(`http://localhost:3000/users/${user.id}/emails`);
         
         if (!response.ok) {
           throw new Error('Erro ao buscar e-mails');
@@ -42,7 +44,11 @@ const InboxScreen: React.FC = () => {
     };
 
     fetchEmails();
-  }, []);
+  }, [user, userLoading]);
+
+  if (loading || userLoading) {
+    return <ActivityIndicator size="large" color="#5138EE" />;
+  }
 
   const renderEmailItem = ({ item }: any) => (
     <EmailItem
@@ -53,10 +59,6 @@ const InboxScreen: React.FC = () => {
       flagged={item.flagged} 
     />
   );
-
-  if (loading) {
-    return <ActivityIndicator size="large" color="#5138EE" />;
-  }
 
   return (
     <View style={[styles.container, { backgroundColor: isDarkTheme ? '#333' : '#f8f8f8' }]}>
