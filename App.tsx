@@ -19,6 +19,7 @@ import SpamScreen from './app/screen/SpamScreen';
 import CalendarScreen from './app/screen/CalendarScreen';
 import { ThemeProvider, useTheme } from './app/context/ThemeContext';
 import { SessionProvider, useSession } from './app/context/SessionContext';
+import { removeSessionData } from './app/services/sessionStorage';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -47,6 +48,10 @@ const Header = ({ onOpenDrawer, onOpenFilterOptions, title }: any) => {
 const DrawerNavigator = ({ onOpenFilterOptions }: any) => {
   const { isDarkTheme } = useTheme();
   const navigation = useNavigation();
+
+  const handleLogout = async () => {
+    await removeSessionData('authData');
+  };
 
   return (
     <Drawer.Navigator
@@ -94,6 +99,15 @@ const DrawerNavigator = ({ onOpenFilterOptions }: any) => {
         name="Lixo Eletrônico"
         component={SpamScreen}
         options={{ drawerIcon: ({ color, size }) => <Ionicons name="alert-circle-outline" size={size} color={color} /> }}
+      />
+      <Drawer.Screen
+        name="Sair"
+        component={() => null}
+        options={{
+          drawerIcon: ({ color, size }) => <Ionicons name="exit-outline" size={size} color={color} />,
+          drawerLabel: 'Sair',
+        }}
+        listeners={{ focus: handleLogout }}
       />
     </Drawer.Navigator>
   );
