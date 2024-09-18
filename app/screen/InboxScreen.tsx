@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import NewEmail from './NewEmail';
 import { useTheme } from '../context/ThemeContext'; 
+import { useSession } from '../context/SessionContext';
 
 type RootStackParamList = {
   Inbox: undefined;
@@ -17,6 +18,7 @@ type InboxScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Inbox'
 
 const InboxScreen: React.FC = () => {
   const navigation = useNavigation<InboxScreenNavigationProp>();
+  const { user } = useSession();
   const [emails, setEmails] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [newEmailVisible, setNewEmailVisible] = useState(false);
@@ -25,11 +27,10 @@ const InboxScreen: React.FC = () => {
   useEffect(() => {
     const fetchEmails = async () => {
       try {
-        const userId = 1;
-        const response = await fetch(`http://localhost:3000/users/${userId}/emails`);
+        const response = await fetch(`http://localhost:3000/users/${user?.id}/emails`);
         
         if (!response.ok) {
-          throw new Error('Erro ao buscar emails');
+          throw new Error('Erro ao buscar e-mails');
         }
         const data = await response.json();
         setEmails(data);
@@ -45,9 +46,9 @@ const InboxScreen: React.FC = () => {
 
   const renderEmailItem = ({ item }: any) => (
     <EmailItem
-      sender={item.sender}
+      sender={item.sender.fullName}
       subject={item.subject}
-      preview={item.preview}
+      preview={item.body}
       date={item.date}
       flagged={item.flagged} 
     />

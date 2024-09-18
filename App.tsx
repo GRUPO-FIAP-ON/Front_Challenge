@@ -18,6 +18,7 @@ import ArchiveScreen from './app/screen/ArchiveScreen';
 import SpamScreen from './app/screen/SpamScreen';
 import CalendarScreen from './app/screen/CalendarScreen';
 import { ThemeProvider, useTheme } from './app/context/ThemeContext';
+import { SessionProvider, useSession } from './app/context/SessionContext';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -101,6 +102,7 @@ const DrawerNavigator = ({ onOpenFilterOptions }: any) => {
 const App = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const { isDarkTheme } = useTheme();
+  const { user } = useSession();
 
   const handleOpenFilterOptions = () => setModalVisible(true);
   const handleCloseFilterOptions = () => setModalVisible(false);
@@ -117,12 +119,19 @@ const App = () => {
       <FlashMessage position="top" />
 
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Cadastro" component={CadastroScreen} />
-        <Stack.Screen name="Home">
-          {() => <DrawerNavigator onOpenFilterOptions={handleOpenFilterOptions} />}
-        </Stack.Screen>
-        <Stack.Screen name="Calendar" component={CalendarScreen} />
+        {user?.id ? (
+          // Navegação para usuários autenticados
+          <>
+            <Stack.Screen name="Home">{() => <DrawerNavigator onOpenFilterOptions={handleOpenFilterOptions} />}</Stack.Screen>
+            <Stack.Screen name="Calendar" component={CalendarScreen} />
+          </>
+        ) : (
+          // Navegação para usuários não autenticados
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Cadastro" component={CadastroScreen} />
+          </>
+        )}
       </Stack.Navigator>
 
       <Modal visible={modalVisible} transparent animationType="slide" onRequestClose={handleCloseFilterOptions}>
@@ -204,7 +213,9 @@ const styles = StyleSheet.create({
 });
 
 export default () => (
-  <ThemeProvider>
-    <App />
-  </ThemeProvider>
+  <SessionProvider>
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  </SessionProvider>
 );

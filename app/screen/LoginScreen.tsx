@@ -4,6 +4,7 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import { useTheme } from '../context/ThemeContext';
 import { showMessage } from 'react-native-flash-message';
+import { saveSessionData } from '../services/sessionStorage';
 
 const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -33,6 +34,8 @@ const LoginScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       const data = await response.json();
 
       if (response.status === 200) {
+        await saveSessionData('authData', JSON.stringify(data));
+
         navigation.navigate('Home');
       } else {
         showMessage({
